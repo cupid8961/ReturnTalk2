@@ -32,11 +32,11 @@ public class SecondFragment extends Fragment
     @Override
     public void onStart() {
         super.onStart();
-        /*
+
         int img[] = {
                 R.drawable.img_mail,R.drawable.img_mail,R.drawable.img_mail,R.drawable.img_mail,R.drawable.img_mail
         };
-
+/*
         // 커스텀 아답타 생성
         MyAdapter adapter = new MyAdapter ( getActivity(),   R.layout.row_event,   img);
 
