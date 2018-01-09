@@ -45,13 +45,20 @@
                 android:layout_weight="1"
                 android:text="삭제" />
         </LinearLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fillViewport="true"
+            android:background="#55ff55">
+
         <TextView
             android:id="@+id/tv_sec_debug"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="GridView 활용"
             android:textAppearance="?android:attr/textAppearanceLarge" />
-
+        </ScrollView>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -64,7 +71,7 @@
                 android:layout_height="wrap_content"
                 android:fillViewport="true"
                 android:background="#118866">
-
+<!--
                 <GridView
                     android:id="@+id/gv_01"
                     android:layout_width="wrap_content"
@@ -79,8 +86,9 @@
                     android:verticalSpacing="10dp"
                     android:numColumns="3"
                     />
-<!--
-                <com.example.ExpandableHeightGridView
+                    -->
+
+                <com.app.alien.returntalk.ExpandableHeightGridView
                     android:id="@+id/gv_01"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -94,7 +102,6 @@
                     android:verticalSpacing="10dp"
                     android:numColumns="3"
                     />
-                    -->
             </ScrollView>
         </LinearLayout>
 

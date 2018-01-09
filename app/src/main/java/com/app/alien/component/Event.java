@@ -1,4 +1,4 @@
-package com.app.alien.returntalk;
+package com.app.alien.component;
 
 import java.util.Date;
 

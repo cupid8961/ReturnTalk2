@@ -1,6 +1,9 @@
 package com.app.alien.returntalk;
 
+import android.content.ContentResolver;
 import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,9 +16,16 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.app.alien.component.Message;
+
+import java.util.ArrayList;
+
 
 public class SecondFragment extends Fragment
 {
+    private    ArrayList<Message> arrayList_SMS ;
+    private    TextView tv_debug;
+
     public SecondFragment()
     {
     }
@@ -28,19 +38,65 @@ public class SecondFragment extends Fragment
 
 
     }
+//sms문자내역 가져오는 코드입니다.
+
+    public int readSMSMessage() {
+        Uri allMessage = Uri.parse("content://sms");
+        ContentResolver cr = getActivity().getContentResolver();
+        Cursor c = cr.query(allMessage,
+                new String[]{"_id", "thread_id", "address", "person", "date", "body"},
+                null, null,
+                "date DESC");
+
+        while (c.moveToNext()) {
+            Message msg = new Message(); // 따로 저는 클래스를 만들어서 담아오도록 했습니다.
+
+            long messageId = c.getLong(0);
+            msg.setMessageId(String.valueOf(messageId));
+
+            long threadId = c.getLong(1);
+            msg.setThreadId(String.valueOf(threadId));
+
+            String address = c.getString(2);
+            msg.setAddress(address);
+
+            long contactId = c.getLong(3);
+            msg.setContactId(String.valueOf(contactId));
+
+            String contactId_string = String.valueOf(contactId);
+            msg.setContactId_string(contactId_string);
+
+            long timestamp = c.getLong(4);
+            msg.setTimestamp(String.valueOf(timestamp));
+
+            String body = c.getString(5);
+            msg.setBody(body);
+
+            arrayList_SMS.add(msg); //이부분은 제가 arraylist에 담으려고 하기떄문에 추가된부분이며 수정가능합니다.
+
+        }
+        return 0;
+    }
 
     @Override
     public void onStart() {
         super.onStart();
 
+        tv_debug= (TextView)getView().findViewById(R.id.tv_sec_debug);
+        arrayList_SMS = new ArrayList<Message>();
+        readSMSMessage();
+
+        for (int i =0; i<arrayList_SMS.size(); i++){
+            tv_debug.append("\n i : "+i+" / phoneNum : "+ arrayList_SMS.get(i).getAddress() +" / body :" +arrayList_SMS.get(i).getBody());
+
+        }
+
         int img[] = {
-                R.drawable.img_mail,R.drawable.img_mail,R.drawable.img_mail,R.drawable.img_mail,R.drawable.img_mail
+                R.drawable.img_mail,R.drawable.img_mail,R.drawable.img_mail,R.drawable.img_mail,R.drawable.img_mail,R.drawable.img_mail,R.drawable.img_mail,R.drawable.img_mail,R.drawable.img_mail,R.drawable.img_mail
         };
-/*
+
         // 커스텀 아답타 생성
         MyAdapter adapter = new MyAdapter ( getActivity(),   R.layout.row_event,   img);
-
-        final TextView tv = (TextView)getView().findViewById(R.id.tv_sec_debug);
 
        // GridView gv = (GridView)getView().findViewById(R.id.gv_01);
         ExpandableHeightGridView mAppsGrid = (ExpandableHeightGridView) getView().findViewById(R.id.gv_01);
@@ -56,10 +112,10 @@ public class SecondFragment extends Fragment
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                tv.setText("position : " + position);
+                tv_debug.setText("position : " + position);
             }
         });
-*/
+
     }
 
     @Override
