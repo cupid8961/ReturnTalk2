@@ -10,7 +10,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,7 +31,7 @@ public class FirstFragment extends Fragment
     private EditText et_msg_simple;
     private int MY_PERMISSIONS_REQUEST_SMS_RECEIVE = 10;
     private Button btn_pt_pn;
-    private EditText et_input;
+    private EditText et_simple;
 
 
     public FirstFragment()
@@ -85,25 +84,8 @@ public class FirstFragment extends Fragment
 
         tv_debug = (TextView)  getView().findViewById(R.id.tv_debug);
         //et_msg_simple = (EditText) getView().findViewById(R.id.et_msg_simple);
-        Button btn_inner_sim = (Button)getView().findViewById(R.id.btn_inner_sim);
-        Button btn_inner_ser = (Button)getView().findViewById(R.id.btn_inner_ser);
 
-        et_input = (EditText)getView().findViewById(R.id.et_input);
-        btn_inner_sim.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // Perform action on click
-
-                et_input.setText("aa");
-            }
-        });
-
-        btn_inner_ser.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // Perform action on click
-                et_input.setText("bb");
-
-            }
-        });
+        et_simple = (EditText)getView().findViewById(R.id.et_simple);
 
 
 
@@ -139,11 +121,21 @@ public class FirstFragment extends Fragment
                     intentFilter.addAction("android.provider.Telephony.SMS_RECEIVED");
                     getActivity().getBaseContext().registerReceiver(myReceiver, intentFilter);
 
-                    //문장 프레퍼런스 저장
+
+                    //프레퍼런스불러오기
                     SharedPreferences prefs = getActivity().getSharedPreferences("pref", MODE_PRIVATE);
+                    int event_index = prefs.getInt("event_index", 0);
+
+
+
+
+
+                    //문장 프레퍼런스 저장
                     SharedPreferences.Editor editor = prefs.edit();
                     //editor.putString("str_simple", et_msg_simple.getText().toString());
-                    editor.putString("str_simple", et_input.getText().toString());
+
+                    editor.putInt("event_index", event_index);
+                    editor.putString("str_simple_"+event_index, et_simple.getText().toString());
                     editor.putBoolean("state_launcher",true);
                     editor.commit();
 
@@ -162,10 +154,14 @@ public class FirstFragment extends Fragment
                     //Do something when Switch is off/unchecked
                     tv_debug.setText("Switch is off.....");
 
-                    //문장 프레퍼런스 저장
                     SharedPreferences prefs = getActivity().getSharedPreferences("pref", MODE_PRIVATE);
+                    int event_index = prefs.getInt("event_index", 0);
+
+
+                    //문장 프레퍼런스 저장
                     SharedPreferences.Editor editor = prefs.edit();
                     editor.putBoolean("state_launcher",false);
+                    editor.putInt("event_index", ++event_index);
                     editor.commit();
 
                     //getActivity().getBaseContext().unregisterReceiver(myReceiver);

@@ -18,7 +18,9 @@ import android.widget.TextView;
 
 import com.app.alien.component.Message;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 
 public class SecondFragment extends Fragment
@@ -77,19 +79,19 @@ public class SecondFragment extends Fragment
         }
         return 0;
     }
-
     @Override
     public void onStart() {
         super.onStart();
 
         tv_debug= (TextView)getView().findViewById(R.id.tv_sec_debug);
-        arrayList_SMS = new ArrayList<Message>();
-        readSMSMessage();
 
-        for (int i =0; i<arrayList_SMS.size(); i++){
-            tv_debug.append("\n i : "+i+" / phoneNum : "+ arrayList_SMS.get(i).getAddress() +" / body :" +arrayList_SMS.get(i).getBody());
 
-        }
+        long time = System.currentTimeMillis();
+        SimpleDateFormat dayTime = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+        String date_now = dayTime.format(new Date(time));
+
+
+        tv_debug.setText("now time : "+ date_now);
 
         int img[] = {
                 R.drawable.img_mail,R.drawable.img_mail,R.drawable.img_mail,R.drawable.img_mail,R.drawable.img_mail,R.drawable.img_mail,R.drawable.img_mail,R.drawable.img_mail,R.drawable.img_mail,R.drawable.img_mail

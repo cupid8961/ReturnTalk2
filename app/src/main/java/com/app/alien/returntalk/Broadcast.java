@@ -11,7 +11,6 @@ import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.util.Date;
 
@@ -20,7 +19,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class Broadcast extends BroadcastReceiver {
 
     private Context mContext;
-    private String mStr;
+    private String str_simple;
     private boolean state_launcher;
 
 
@@ -40,7 +39,7 @@ public class Broadcast extends BroadcastReceiver {
         if ("android.provider.Telephony.SMS_RECEIVED".equals(intent.getAction())) {
             Log.i("returntalk","sms get!");
 
-            // SMS �޽����� �Ľ��մϴ�.
+            // SMS
             Bundle bundle = intent.getExtras();
             Object messages[] = (Object[])bundle.get("pdus");
             SmsMessage smsMessage[] = new SmsMessage[messages.length];
@@ -64,7 +63,7 @@ public class Broadcast extends BroadcastReceiver {
 
             //preference load
             SharedPreferences prefs = context.getSharedPreferences("pref", MODE_PRIVATE);
-            mStr = prefs.getString("str_simple", "error");
+            str_simple = prefs.getString("str_simple", "error");
             state_launcher = prefs.getBoolean("state_launcher", false);
 
 
@@ -86,7 +85,7 @@ public class Broadcast extends BroadcastReceiver {
                 if (message.contains("msg") ){// 디버깅용@ 나중엔 삭제해야함.
                     Log.i("returntalk","나에게 보냈음 /sendNumber:"+sendNumber+" / hardwareNumber:"+hardwareNumber);
                 }else{
-                    sendSMS(sendNumber,"자동문자응답 앱 테스트 \n 내msg :"+mStr+"\n 상대msg :"+message);
+                    sendSMS(sendNumber,"msg :"+ str_simple );
                     Log.i("returntalk","남에게서옴 /sendNumber:"+sendNumber+" / hardwareNumber:"+hardwareNumber);
                 }
             }
@@ -95,7 +94,7 @@ public class Broadcast extends BroadcastReceiver {
         }
     }
     public void setMsg(String str){
-        mStr = str;
+        str_simple = str;
     }
     public void sendSMS(String smsNumber, String smsText){
         PendingIntent sentIntent = PendingIntent.getBroadcast(mContext, 0, new Intent("SMS_SENT_ACTION"), 0);
