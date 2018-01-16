@@ -73,14 +73,21 @@
             </LinearLayout>
 
 
+
+
+
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="111.67dp"
+            android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="0.3dp"
+                android:background="#5285c4" />
 
             <EditText
                 android:id="@+id/et_event_name"
@@ -98,30 +105,31 @@
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="70dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="1dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <EditText
                     android:id="@+id/et_simple"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="70dp"
                     android:layout_marginLeft="20dp"
                     android:layout_weight="1"
-                    android:background="@null"
+                    android:background="@drawable/rectangle"
                     android:ems="10"
                     android:gravity="center_vertical|center_horizontal"
-                    android:textColor="#5285c4"
                     android:inputType="textPersonName"
                     android:padding="5dp"
-                    android:text="간단메세지창" />
+                    android:text="반환할 메세지를 입력하세요"
+                    android:textColor="#5285c4" />
 
                 <ImageButton
                     android:id="@+id/btn_modi"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="20dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="25dp"
+                    android:layout_marginTop="25dp"
                     android:background="@android:color/transparent"
                     android:gravity="center_horizontal"
                     android:scaleType="centerInside"
@@ -135,7 +143,8 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="250dp"
+            android:layout_marginBottom="16dp">
 
             <ImageView
                 android:id="@+id/iv_loading"
@@ -150,13 +159,15 @@
                 android:gravity="center"
                 android:text="Return Talk"
                 android:textColor="#5285c4"
-                android:textSize="50sp" />
+                android:textSize="35sp" />
         </FrameLayout>
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
             android:orientation="horizontal">
 
             <TextView
@@ -164,27 +175,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="on" />
+                android:gravity="center"
+                android:text="on"
+                android:textColor="#AAAAAA" />
 
             <TextView
                 android:id="@+id/tv_bar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="|" />
+                android:gravity="center"
+                android:text="|"
+                android:textColor="#5285c4" />
 
             <TextView
                 android:id="@+id/tv_off"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="off" />
-
-            <Switch
-                android:id="@+id/switch_launcher"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="시작하기" />
+                android:gravity="center"
+                android:text="off"
+                android:textColor="#5285c4" />
 
         </LinearLayout>
 
@@ -192,13 +203,15 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tv_label_receive_sms"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="실시간 문자 현황" />
+                android:text="실시간 문자 현황"
+                android:textColor="#5285c4" />
 
             <ScrollView
                 android:layout_width="match_parent"
@@ -210,10 +223,16 @@
                     android:orientation="vertical">
 
                     <ListView
+                        android:id="@+id/lv_sms"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
                 </LinearLayout>
             </ScrollView>
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="0.3dp"
+                android:background="#5285c4" />
 
         </LinearLayout>
 

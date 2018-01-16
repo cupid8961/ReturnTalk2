@@ -27,15 +27,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="기본메세지" />
+                android:text="기본메세지"
+                android:textColor="#5285c4"
+                android:background="@android:color/transparent"
+                />
 
             <Button
                 android:id="@+id/btn_second"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="보관함" />
-
+                android:text="보관함"
+                android:textColor="#AAAAAA"
+                android:background="@android:color/transparent"
+                />
+<!--
             <Button
                 android:id="@+id/btn_third"
                 android:layout_width="wrap_content"
@@ -43,6 +49,7 @@
                 android:layout_weight="1"
                 android:text="세번째 탭"
                 android:visibility="gone" />
+                -->
         </LinearLayout>
     </LinearLayout>
 

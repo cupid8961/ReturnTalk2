@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -15,12 +16,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,13 +28,16 @@ import static android.content.Context.MODE_PRIVATE;
 public class FirstFragment extends Fragment
 {
     private Context mContext;
-    private Switch switch_launcher;
+    //private Switch switch_launcher;
+    private TextView tv_on , tv_off;
     private TextView tv_debug;
     private EditText et_msg_simple;
     private int MY_PERMISSIONS_REQUEST_SMS_RECEIVE = 10;
     private ImageButton btn_pt_pn, btn_option;
     private EditText et_simple;
-
+    public static final String STRCOLOR_BLUE = "#5285c4";
+    public static final String STRCOLOR_GRAY = "#AAAAAA";
+    public static final String STRCOLOR_RED = "#FF6C6C";
 
     public FirstFragment()
     {
@@ -87,6 +88,9 @@ public class FirstFragment extends Fragment
         super.onStart();
 
         mContext = getActivity();
+        tv_on = (TextView) getView().findViewById(R.id.tv_on);
+        tv_off = (TextView) getView().findViewById(R.id.tv_off);
+
         tv_debug = (TextView)  getView().findViewById(R.id.tv_debug);
         //et_msg_simple = (EditText) getView().findViewById(R.id.et_msg_simple);
 
@@ -106,7 +110,6 @@ public class FirstFragment extends Fragment
         });
 
 
-        switch_launcher= (Switch) getView().findViewById(R.id.switch_launcher);
         final BroadcastReceiver myReceiver = new Broadcast();
         btn_pt_pn =(ImageButton)  getView().findViewById(R.id.btn_pt_pn);
         btn_pt_pn.setOnClickListener(new View.OnClickListener() {
@@ -119,73 +122,75 @@ public class FirstFragment extends Fragment
             }
         });
 
+        tv_on.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Perform action on click
 
-        switch_launcher.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
-            @Override
-            public void onCheckedChanged(CompoundButton cb, boolean on){
-                if(on)
-                {
-                    //Do something when Switch button is on/checked
-                    tv_debug.setText("Switch is on.....");
+                //Do something when Switch button is on/checked
+                tv_debug.setText("Switch is on.....");
+
+                Toast.makeText(mContext, "문자자동응답이 시작되었습니다.", Toast.LENGTH_SHORT).show();
+
+                // 브로드캐스트 리시버 등록
+                //IntentFilter intentFilter = new IntentFilter();
+
+                IntentFilter intentFilter = new IntentFilter(Intent.ACTION_SCREEN_ON);
+                intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
+                intentFilter.addAction(Intent.ACTION_BOOT_COMPLETED);
+                intentFilter.addAction("android.provider.Telephony.SMS_RECEIVED");
+                getActivity().getBaseContext().registerReceiver(myReceiver, intentFilter);
 
 
-                    // 브로드캐스트 리시버 등록
-                    //IntentFilter intentFilter = new IntentFilter();
-
-                    IntentFilter intentFilter = new IntentFilter(Intent.ACTION_SCREEN_ON);
-                    intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
-                    intentFilter.addAction(Intent.ACTION_BOOT_COMPLETED);
-                    intentFilter.addAction("android.provider.Telephony.SMS_RECEIVED");
-                    getActivity().getBaseContext().registerReceiver(myReceiver, intentFilter);
-
-
-                    //프레퍼런스불러오기
-                    SharedPreferences prefs = getActivity().getSharedPreferences("pref", MODE_PRIVATE);
-                    int event_index = prefs.getInt("event_index", 0);
-
+                //프레퍼런스불러오기
+                SharedPreferences prefs = getActivity().getSharedPreferences("pref", MODE_PRIVATE);
+                int event_index = prefs.getInt("event_index", 0);
 
 
 
 
-                    //문장 프레퍼런스 저장
-                    SharedPreferences.Editor editor = prefs.edit();
-                    //editor.putString("str_simple", et_msg_simple.getText().toString());
 
-                    editor.putInt("event_index", event_index);
-                    editor.putString("str_simple_"+event_index, et_simple.getText().toString());
-                    editor.putBoolean("state_launcher",true);
-                    editor.commit();
+                //문장 프레퍼런스 저장
+                SharedPreferences.Editor editor = prefs.edit();
+                //editor.putString("str_simple", et_msg_simple.getText().toString());
 
-
-                    //SMS퍼미션 따로추가
-                    ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.RECEIVE_SMS},MY_PERMISSIONS_REQUEST_SMS_RECEIVE);
+                editor.putInt("event_index", event_index);
+                editor.putString("str_simple_"+event_index, et_simple.getText().toString());
+                editor.putBoolean("state_launcher",true);
+                editor.commit();
 
 
+                //SMS퍼미션 따로추가
+                ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.RECEIVE_SMS},MY_PERMISSIONS_REQUEST_SMS_RECEIVE);
 
-                    Log.i("returntalk","registerReceiver");
+                tv_on.setTextColor(Color.parseColor(STRCOLOR_BLUE));
 
-
-                }
-                else
-                {
-                    //Do something when Switch is off/unchecked
-                    tv_debug.setText("Switch is off.....");
-
-                    SharedPreferences prefs = getActivity().getSharedPreferences("pref", MODE_PRIVATE);
-                    int event_index = prefs.getInt("event_index", 0);
+                tv_off.setTextColor(Color.parseColor(STRCOLOR_GRAY));
+                Log.i("returntalk","registerReceiver");
+            }
+        });
 
 
-                    //문장 프레퍼런스 저장
-                    SharedPreferences.Editor editor = prefs.edit();
-                    editor.putBoolean("state_launcher",false);
-                    editor.putInt("event_index", ++event_index);
-                    editor.commit();
+        tv_off.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Perform action on click
+                //Do something when Switch is off/unchecked
+                tv_debug.setText("Switch is off.....");
+                Toast.makeText(mContext, "문자자동응답이 종료되었습니다..", Toast.LENGTH_SHORT).show();
+                SharedPreferences prefs = getActivity().getSharedPreferences("pref", MODE_PRIVATE);
+                int event_index = prefs.getInt("event_index", 0);
 
-                    //getActivity().getBaseContext().unregisterReceiver(myReceiver);
 
-                    Log.i("returntalk","unregisterReceiver");
+                //문장 프레퍼런스 저장
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putBoolean("state_launcher",false);
+                editor.putInt("event_index", ++event_index);
+                editor.commit();
 
-                }
+                //getActivity().getBaseContext().unregisterReceiver(myReceiver);
+                tv_off.setTextColor(Color.parseColor(STRCOLOR_BLUE));
+                tv_on.setTextColor(Color.parseColor(STRCOLOR_GRAY));
+                Log.i("returntalk","unregisterReceiver");
+
             }
         });
     }
