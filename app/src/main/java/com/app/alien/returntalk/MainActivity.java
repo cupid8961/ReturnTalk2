@@ -1,10 +1,12 @@
 package com.app.alien.returntalk;
 
+import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity
@@ -16,7 +18,13 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFormat(PixelFormat.TRANSLUCENT);
+
         setContentView(R.layout.activity_main);
+
+
+
 
         vp = (ViewPager)findViewById(R.id.vp);
         Button btn_first = (Button)findViewById(R.id.btn_first);

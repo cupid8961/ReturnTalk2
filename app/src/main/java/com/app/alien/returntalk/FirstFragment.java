@@ -2,6 +2,7 @@ package com.app.alien.returntalk;
 
 import android.Manifest;
 import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -17,20 +18,23 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import static android.content.Context.MODE_PRIVATE;
 
 
 public class FirstFragment extends Fragment
 {
+    private Context mContext;
     private Switch switch_launcher;
     private TextView tv_debug;
     private EditText et_msg_simple;
     private int MY_PERMISSIONS_REQUEST_SMS_RECEIVE = 10;
-    private Button btn_pt_pn;
+    private ImageButton btn_pt_pn, btn_option;
     private EditText et_simple;
 
 
@@ -82,16 +86,29 @@ public class FirstFragment extends Fragment
     public void onStart() {
         super.onStart();
 
+        mContext = getActivity();
         tv_debug = (TextView)  getView().findViewById(R.id.tv_debug);
         //et_msg_simple = (EditText) getView().findViewById(R.id.et_msg_simple);
 
         et_simple = (EditText)getView().findViewById(R.id.et_simple);
 
+        btn_option =(ImageButton)  getView().findViewById(R.id.btn_option);
+        btn_option.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Perform action on click
+                Toast.makeText(mContext, "구현중입니다.", Toast.LENGTH_SHORT).show();
+                /*
+                Intent intent = new Intent(getActivity(), PresentationActivity.class);
+                startActivity(intent);
+                */
+
+            }
+        });
 
 
         switch_launcher= (Switch) getView().findViewById(R.id.switch_launcher);
         final BroadcastReceiver myReceiver = new Broadcast();
-        btn_pt_pn =(Button)  getView().findViewById(R.id.btn_pt_pn);
+        btn_pt_pn =(ImageButton)  getView().findViewById(R.id.btn_pt_pn);
         btn_pt_pn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Perform action on click
