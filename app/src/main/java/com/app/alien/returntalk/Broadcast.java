@@ -21,12 +21,12 @@ public class Broadcast extends BroadcastReceiver {
     private Context mContext;
     private String str_simple;
     private boolean state_launcher;
-
+    private int event_index;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         mContext = context;
-        Log.i("returntalk","intent.getAction : "+intent.getAction());
+        Log.i("returntalk","\n------------------------------------------- \nintent.getAction : "+intent.getAction());
         if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())){
             Log.i("returntalk","bootcompleted");
         }
@@ -63,7 +63,12 @@ public class Broadcast extends BroadcastReceiver {
 
             //preference load
             SharedPreferences prefs = context.getSharedPreferences("pref", MODE_PRIVATE);
-            str_simple = prefs.getString("str_simple", "error");
+
+
+            event_index = prefs.getInt("event_index",0);
+
+            Log.i("returntalk","event_index : "+event_index);
+            str_simple = prefs.getString("str_simple_"+event_index, "error");
             state_launcher = prefs.getBoolean("state_launcher", false);
 
 

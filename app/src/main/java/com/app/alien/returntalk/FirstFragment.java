@@ -154,6 +154,8 @@ public class FirstFragment extends Fragment
                 //editor.putString("str_simple", et_msg_simple.getText().toString());
 
                 editor.putInt("event_index", event_index);
+
+                Log.i("returntalk","현재저장되는 event_index : "+event_index);
                 editor.putString("str_simple_"+event_index, et_simple.getText().toString());
                 editor.putBoolean("state_launcher",true);
                 editor.commit();
@@ -163,7 +165,6 @@ public class FirstFragment extends Fragment
                 ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.RECEIVE_SMS},MY_PERMISSIONS_REQUEST_SMS_RECEIVE);
 
                 tv_on.setTextColor(Color.parseColor(STRCOLOR_BLUE));
-
                 tv_off.setTextColor(Color.parseColor(STRCOLOR_GRAY));
                 Log.i("returntalk","registerReceiver");
             }
