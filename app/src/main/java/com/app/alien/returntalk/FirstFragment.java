@@ -12,15 +12,20 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.app.alien.component.ListViewAdapter;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -34,10 +39,15 @@ public class FirstFragment extends Fragment
     private EditText et_msg_simple;
     private int MY_PERMISSIONS_REQUEST_SMS_RECEIVE = 10;
     private ImageButton btn_pt_pn, btn_option;
-    private EditText et_simple;
+    private EditText et_simple ,et_event_name;
     public static final String STRCOLOR_BLUE = "#5285c4";
     public static final String STRCOLOR_GRAY = "#AAAAAA";
     public static final String STRCOLOR_RED = "#FF6C6C";
+    private ListView listview_msg;
+    private ListViewAdapter adapter_msg;
+
+    private static int index_exam;
+
 
     public FirstFragment()
     {
@@ -88,6 +98,18 @@ public class FirstFragment extends Fragment
         super.onStart();
 
         mContext = getActivity();
+        index_exam = 0;
+
+
+        // Adapter 생성
+        adapter_msg = new ListViewAdapter() ;
+
+        // 리스트뷰 참조 및 Adapter달기
+        listview_msg = (ListView) getView().findViewById(R.id.lv_sms);
+        listview_msg.setAdapter(adapter_msg);
+
+
+
         tv_on = (TextView) getView().findViewById(R.id.tv_on);
         tv_off = (TextView) getView().findViewById(R.id.tv_off);
 
@@ -95,6 +117,7 @@ public class FirstFragment extends Fragment
         //et_msg_simple = (EditText) getView().findViewById(R.id.et_msg_simple);
 
         et_simple = (EditText)getView().findViewById(R.id.et_simple);
+        et_event_name = (EditText)getView().findViewById(R.id.et_event_name);
 
         btn_option =(ImageButton)  getView().findViewById(R.id.btn_option);
         btn_option.setOnClickListener(new View.OnClickListener() {
@@ -154,10 +177,11 @@ public class FirstFragment extends Fragment
                 //editor.putString("str_simple", et_msg_simple.getText().toString());
 
                 editor.putInt("event_index", event_index);
-
-                Log.i("returntalk","현재저장되는 event_index : "+event_index);
                 editor.putString("str_simple_"+event_index, et_simple.getText().toString());
                 editor.putBoolean("state_launcher",true);
+                editor.putString("name_event", et_event_name.getText().toString());
+
+                Log.i("returntalk","현재저장되는 event_index : "+event_index);
                 editor.commit();
 
 
@@ -190,10 +214,22 @@ public class FirstFragment extends Fragment
                 //getActivity().getBaseContext().unregisterReceiver(myReceiver);
                 tv_off.setTextColor(Color.parseColor(STRCOLOR_BLUE));
                 tv_on.setTextColor(Color.parseColor(STRCOLOR_GRAY));
+                addMsgItem();
                 Log.i("returntalk","unregisterReceiver");
 
             }
         });
+    }
+
+    private void addMsgItem() {
+
+        // 첫 번째 아이템 추가.
+        adapter_msg.addItem(""+ ++index_exam,"time : ","phonenum:","msg:");
+
+        adapter_msg.notifyDataSetChanged();
+        setListViewHeightBasedOnChildren(listview_msg);
+
+
     }
 
     @Override
@@ -203,6 +239,48 @@ public class FirstFragment extends Fragment
         return layout;
 
     }
+    public void setListViewHeightBasedOnChildren(ListView listView) {
+
+        ListAdapter listAdapter = listView.getAdapter();
+
+        if (listAdapter == null) {
+
+            // pre-condition
+
+            return;
+
+        }
+
+
+
+        int totalHeight = 0;
+
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.AT_MOST);
+
+
+
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+
+            View listItem = listAdapter.getView(i, null, listView);
+
+            listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+
+            totalHeight += listItem.getMeasuredHeight();
+
+        }
+
+
+
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+
+        listView.setLayoutParams(params);
+
+        listView.requestLayout();
+
+    }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

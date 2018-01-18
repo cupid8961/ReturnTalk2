@@ -25,7 +25,7 @@ import java.util.Date;
 
 public class SecondFragment extends Fragment
 {
-    private    ArrayList<Message> arrayList_SMS ;
+    //private    ArrayList<Message> arrayList_SMS ;
     private    TextView tv_debug;
 
     public SecondFragment()
@@ -41,7 +41,7 @@ public class SecondFragment extends Fragment
 
     }
 //sms문자내역 가져오는 코드입니다.
-
+/*
     public int readSMSMessage() {
         Uri allMessage = Uri.parse("content://sms");
         ContentResolver cr = getActivity().getContentResolver();
@@ -79,6 +79,8 @@ public class SecondFragment extends Fragment
         }
         return 0;
     }
+    */
+
     @Override
     public void onStart() {
         super.onStart();

@@ -73,9 +73,6 @@
             </LinearLayout>
 
 
-
-
-
         </LinearLayout>
 
         <LinearLayout
@@ -202,8 +199,9 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_margin="10dp"
+            android:layout_weight="1"
             android:orientation="vertical">
 
             <TextView
@@ -215,17 +213,18 @@
 
             <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_margin="10dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:orientation="vertical">
 
                     <ListView
                         android:id="@+id/lv_sms"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
+                        android:layout_height="wrap_content" />
                 </LinearLayout>
             </ScrollView>
 

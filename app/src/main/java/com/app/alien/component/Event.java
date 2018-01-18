@@ -24,6 +24,7 @@ import java.util.Date;
 public class Event {
     private int no_event;
     private String name_event;
+    private int state;
     private int type;
     private Date time_start;
     private Date time_end;
@@ -33,12 +34,12 @@ public class Event {
     private int o_reply_term;
     private boolean o_isavailable_stranger;
     private boolean o_isavailable_multiple;
-    private boolean o_iskeep;
     private String image_url;
 
-    public Event(int no_event, String name_event, int type, Date time_start, Date time_end, int cnt_reply, int cnt_participant, String msg_event, int o_reply_term, boolean o_isavailable_stranger, boolean o_isavailable_multiple, boolean o_iskeep, String image_url) {
+    public Event(int no_event, String name_event, int state, int type, Date time_start, Date time_end, int cnt_reply, int cnt_participant, String msg_event, int o_reply_term, boolean o_isavailable_stranger, boolean o_isavailable_multiple, String image_url) {
         this.no_event = no_event;
         this.name_event = name_event;
+        this.state = state;
         this.type = type;
         this.time_start = time_start;
         this.time_end = time_end;
@@ -48,8 +49,16 @@ public class Event {
         this.o_reply_term = o_reply_term;
         this.o_isavailable_stranger = o_isavailable_stranger;
         this.o_isavailable_multiple = o_isavailable_multiple;
-        this.o_iskeep = o_iskeep;
+
         this.image_url = image_url;
+    }
+
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
     }
 
     public int getNo_event() {
@@ -140,13 +149,6 @@ public class Event {
         this.o_isavailable_multiple = o_isavailable_multiple;
     }
 
-    public boolean isO_iskeep() {
-        return o_iskeep;
-    }
-
-    public void setO_iskeep(boolean o_iskeep) {
-        this.o_iskeep = o_iskeep;
-    }
 
     public String getImage_url() {
         return image_url;
