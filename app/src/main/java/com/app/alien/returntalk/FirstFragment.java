@@ -27,6 +27,8 @@ import android.widget.Toast;
 
 import com.app.alien.component.ListViewAdapter;
 
+import java.util.Date;
+
 import static android.content.Context.MODE_PRIVATE;
 
 
@@ -45,8 +47,10 @@ public class FirstFragment extends Fragment
     public static final String STRCOLOR_RED = "#FF6C6C";
     private ListView listview_msg;
     private ListViewAdapter adapter_msg;
+    BroadcastReceiver mReceiver;
 
     private static int index_exam;
+
 
 
     public FirstFragment()
@@ -99,6 +103,25 @@ public class FirstFragment extends Fragment
 
         mContext = getActivity();
         index_exam = 0;
+
+        IntentFilter intentFilter = new IntentFilter(
+                "fragment01");
+
+        mReceiver = new BroadcastReceiver() {
+
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                //extract our message from intent
+                String no_reply = intent.getStringExtra("no_reply");
+                String state = intent.getStringExtra("state");
+                //log our message value
+                Log.i("returntalk","no_reply : "+no_reply+" / state : " +state);
+
+            }
+        };
+        //registering our receiver
+        getActivity().registerReceiver(mReceiver,intentFilter);
+
 
 
         // Adapter 생성
@@ -170,6 +193,8 @@ public class FirstFragment extends Fragment
 
 
 
+                //현재시간 가져오기
+                Date time_now = new Date();
 
 
                 //문장 프레퍼런스 저장
@@ -177,8 +202,9 @@ public class FirstFragment extends Fragment
                 //editor.putString("str_simple", et_msg_simple.getText().toString());
 
                 editor.putInt("event_index", event_index);
-                editor.putString("str_simple_"+event_index, et_simple.getText().toString());
+                editor.putString("str_simple", et_simple.getText().toString());
                 editor.putBoolean("state_launcher",true);
+                editor.putLong("time_start", time_now.getTime());
                 editor.putString("name_event", et_event_name.getText().toString());
 
                 Log.i("returntalk","현재저장되는 event_index : "+event_index);
@@ -205,9 +231,15 @@ public class FirstFragment extends Fragment
                 int event_index = prefs.getInt("event_index", 0);
 
 
+
+
+                //현재시간 가져오기
+                Date time_now = new Date();
+
                 //문장 프레퍼런스 저장
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putBoolean("state_launcher",false);
+                editor.putLong("time_end" , time_now.getTime());
                 editor.putInt("event_index", ++event_index);
                 editor.commit();
 
@@ -225,7 +257,6 @@ public class FirstFragment extends Fragment
 
         // 첫 번째 아이템 추가.
         adapter_msg.addItem(""+ ++index_exam,"time : ","phonenum:","msg:");
-
         adapter_msg.notifyDataSetChanged();
         setListViewHeightBasedOnChildren(listview_msg);
 
@@ -291,3 +322,4 @@ public class FirstFragment extends Fragment
         }
     }
 }
+

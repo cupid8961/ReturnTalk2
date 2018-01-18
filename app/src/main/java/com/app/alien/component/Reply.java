@@ -6,17 +6,26 @@ import java.util.Date;
  * Created by alien on 2018-01-04.
  */
 
-public class reply {
+public class Reply {
     private int no_reply;
     private int no_event;
     private String name_event; //필요는 없음.
-    private Date time_receive;
+    private long time_receive;
     private String phone_num;
     private String msg_client;
     private String msg_server; //필요는 없음
-    private String state; //0- 시작전 디폴트 , 1- 문자옴, 2 답장함,
 
-    public reply(int no_reply, int no_event, String name_event, Date time_receive, String phone_num, String msg_client, String msg_server, String state) {
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
+    }
+
+    private int state; //0- 시작전 디폴트 , 1- 문자옴, 2 답장함,
+
+    public Reply(int no_reply, int no_event, String name_event, long time_receive, String phone_num, String msg_client, String msg_server, int state) {
         this.no_reply = no_reply;
         this.no_event = no_event;
         this.name_event = name_event;
@@ -27,12 +36,12 @@ public class reply {
         this.state = state;
     }
 
-    public String getState() {
-        return state;
+    public long getTime_receive() {
+        return time_receive;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public void setTime_receive(long time_receive) {
+        this.time_receive = time_receive;
     }
 
     public int getNo_reply() {
@@ -59,13 +68,6 @@ public class reply {
         this.name_event = name_event;
     }
 
-    public Date getTime_receive() {
-        return time_receive;
-    }
-
-    public void setTime_receive(Date time_receive) {
-        this.time_receive = time_receive;
-    }
 
     public String getPhone_num() {
         return phone_num;
