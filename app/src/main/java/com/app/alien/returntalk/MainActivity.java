@@ -1,11 +1,16 @@
 package com.app.alien.returntalk;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -16,7 +21,7 @@ public class MainActivity extends AppCompatActivity
     Button btn_first;
     Button btn_second;
     Button btn_third;
-
+    Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -24,6 +29,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
+        mContext = getBaseContext();
 
 
         vp = (ViewPager)findViewById(R.id.vp);
@@ -40,7 +46,6 @@ public class MainActivity extends AppCompatActivity
         btn_second.setTag(1);
        // btn_third.setOnClickListener(movePageListener);
         //btn_third.setTag(2);
-
 
 
     }
@@ -106,5 +111,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
     }
 }

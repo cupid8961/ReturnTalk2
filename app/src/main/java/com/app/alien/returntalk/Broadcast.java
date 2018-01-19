@@ -95,13 +95,13 @@ public class Broadcast extends BroadcastReceiver {
                     Reply myReply = makeReply(sendNumber,str_simple);// 리플객체 생성,
 
                     //sms_list 에 빨간색으로 올리기
-                    listup_sms_red(myReply.getNo_reply());
+                    listup_sms(myReply.getNo_reply(),1);
 
                     // sms보내기
                     sendSMS(myReply.getNo_reply(),myReply.getPhone_num(),"msg :"+myReply.getMsg_server() );//리플을 날리기
 
                     //sms_list 에 파란색으로 바꾸기
-                    listup_sms_blue(myReply.getNo_reply());
+                    listup_sms(myReply.getNo_reply(),2);
 
                     //프레퍼런스로 저장하기
                     savePrefReply(myReply);//리플 프레퍼런스 저장
@@ -113,23 +113,20 @@ public class Broadcast extends BroadcastReceiver {
         }
     }
 
-    private void listup_sms_blue(int no_reply) {
-        Log.i("returntalk","listup_sms_blue: start");
+    private void listup_sms(int no_reply,int isblue) {
+        //Intent intent_blue = new Intent("android.intent.action.MAIN");
         Intent intent_blue = new Intent("fragment01");
         intent_blue.putExtra("no_reply",no_reply);
-        intent_blue.putExtra("state",2); //답장함
+        if (isblue==1){ //blue
+            intent_blue.putExtra("state",1); //답장함
+        }else{
+
+            intent_blue.putExtra("state",2); //답장함
+        }
         mContext.sendBroadcast(intent_blue);
-        Log.i("returntalk","listup_sms_blue: end /"+no_reply+" / "+2);
+        Log.i("returntalk","listup_sms_blue: end /"+no_reply+" / "+isblue);
     }
 
-    private void listup_sms_red(int no_reply) {
-        Log.i("returntalk","listup_sms_red: start");
-        Intent intent_red = new Intent("fragment01");
-        intent_red.putExtra("no_reply",no_reply);
-        intent_red.putExtra("state",1); //문자옴
-        mContext.sendBroadcast(intent_red);
-        Log.i("returntalk","listup_sms_red: end /"+no_reply+" / "+1);
-    }
 
 
     private void savePrefReply(Reply myReply) {

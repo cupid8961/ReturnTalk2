@@ -12,7 +12,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,9 +46,9 @@ public class FirstFragment extends Fragment
     public static final String STRCOLOR_RED = "#FF6C6C";
     private ListView listview_msg;
     private ListViewAdapter adapter_msg;
-    BroadcastReceiver mReceiver;
 
     private static int index_exam;
+    private BroadcastReceiver sms_mReceiver;
 
 
 
@@ -104,23 +103,24 @@ public class FirstFragment extends Fragment
         mContext = getActivity();
         index_exam = 0;
 
+        //인텐트받기
         IntentFilter intentFilter = new IntentFilter(
                 "fragment01");
 
-        mReceiver = new BroadcastReceiver() {
-
+        sms_mReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                //extract our message from intent
-                String no_reply = intent.getStringExtra("no_reply");
-                String state = intent.getStringExtra("state");
-                //log our message value
-                Log.i("returntalk","no_reply : "+no_reply+" / state : " +state);
 
+                //extract our message from intent
+                int no_reply = intent.getIntExtra("no_reply",-1);
+                int state = intent.getIntExtra("state",-1);
+                //log our message value
+                Log.i("returntalk","fragment01)br receive : no_reply : "+no_reply+"/state : "+state);
             }
+
         };
         //registering our receiver
-        getActivity().registerReceiver(mReceiver,intentFilter);
+        getActivity().registerReceiver(sms_mReceiver, intentFilter);
 
 
 
@@ -247,6 +247,11 @@ public class FirstFragment extends Fragment
                 tv_off.setTextColor(Color.parseColor(STRCOLOR_BLUE));
                 tv_on.setTextColor(Color.parseColor(STRCOLOR_GRAY));
                 addMsgItem();
+
+
+                if(sms_mReceiver.isInitialStickyBroadcast())
+                    getActivity().unregisterReceiver(sms_mReceiver);
+
                 Log.i("returntalk","unregisterReceiver");
 
             }
