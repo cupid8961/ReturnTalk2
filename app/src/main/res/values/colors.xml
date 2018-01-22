@@ -3,4 +3,22 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="blue_bg">#0466e0</color>
+
+    <color name="white10">#ffffff</color>
+    <color name="white50">#5285c4</color>
+
+    <declare-styleable name="RippleView">
+
+        <attr name="radius" format="integer" />
+        <attr name="stroke_width" format="integer" />
+        <attr name="duration" format="integer" />
+        <attr name="repeat_count" format="integer" />
+
+        <attr name="two_ripple_times" format="float" />
+        <attr name="three_ripple_times" format="float" />
+        <attr name="max_more_radius_times" format="float" />
+
+    </declare-styleable>
 </resources>

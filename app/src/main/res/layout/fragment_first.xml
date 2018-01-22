@@ -143,14 +143,28 @@
             android:layout_height="250dp"
             android:layout_marginBottom="16dp">
 
+            <com.app.alien.component.RippleView
+            android:id="@+id/root_rv"
+            app:radius="300"
+            app:stroke_width="1"
+            app:duration="3000"
+            app:repeat_count="999"
+            app:two_ripple_times="1.5"
+            app:three_ripple_times="2.0"
+            app:max_more_radius_times="1.5"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+                />
+            <!--
             <ImageView
                 android:id="@+id/iv_loading"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/loading" />
+-->
 
             <TextView
-                android:id="@+id/tv_state"
+                android:id="@+id/root_tv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"

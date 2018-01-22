@@ -1,6 +1,8 @@
 package com.app.alien.returntalk;
 
 import android.Manifest;
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -27,6 +29,7 @@ import android.widget.Toast;
 
 import com.app.alien.component.CalendarUtils;
 import com.app.alien.component.ListViewAdapter;
+import com.app.alien.component.RippleView;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -34,7 +37,7 @@ import java.util.Date;
 import static android.content.Context.MODE_PRIVATE;
 
 
-public class FirstFragment extends Fragment
+public class FirstFragment extends Fragment  implements RippleView.RippleAnimationListener
 {
     private Context mContext;
     //private Switch switch_launcher;
@@ -57,6 +60,12 @@ public class FirstFragment extends Fragment
     private boolean is_tv_on ;
 
     private static final Boolean ISDEBUG =true;
+
+    //rippleview
+    private RippleView mRippleView;
+    private TextView mTextView;
+
+
 
 
     public FirstFragment()
@@ -113,6 +122,8 @@ public class FirstFragment extends Fragment
 
 
 
+        initView();
+        initListener();
 
 
 
@@ -203,6 +214,9 @@ public class FirstFragment extends Fragment
                     Toast.makeText(mContext, "이미 시작되었습니다.", Toast.LENGTH_SHORT).show();
                     return ;
                 }else {
+
+                    mRippleView.startRipple();
+
                     is_tv_on = true;
                     tv_debug.setText("Switch is on.....");
 
@@ -282,6 +296,8 @@ public class FirstFragment extends Fragment
                 }
                 else {
                     is_tv_on = false;
+
+                    mRippleView.stopRipple();
                     tv_debug.setText("Switch is off.....");
                     Toast.makeText(mContext, "문자자동응답이 종료되었습니다..", Toast.LENGTH_SHORT).show();
                     SharedPreferences prefs = getActivity().getSharedPreferences("pref", MODE_PRIVATE);
@@ -315,6 +331,38 @@ public class FirstFragment extends Fragment
         });
     }
 
+    private void initListener() {
+        mRippleView.setRippleStateListener(this);
+    }
+
+    private void initView() {
+        mRippleView = (RippleView) getView().findViewById(R.id.root_rv);
+        mTextView = (TextView) getView().findViewById(R.id.root_tv);
+    }
+
+
+
+    @Override public void onAnimationUpdate(ValueAnimator animation) {
+        float fraction = animation.getAnimatedFraction();
+        int value = (int) (fraction * 100);
+        mTextView.setText(String.valueOf(value) + "%");
+    }
+
+    @Override public void onAnimationStart(Animator animation) {
+        mTextView.setText("0%");
+    }
+
+    @Override public void onAnimationEnd(Animator animation) {
+
+    }
+
+    @Override public void onAnimationCancel(Animator animation) {
+
+    }
+
+    @Override public void onAnimationRepeat(Animator animation) {
+
+    }
     private void unregist_all_Receiver() {
         try  {
             if(sms_mReceiver!=null )
