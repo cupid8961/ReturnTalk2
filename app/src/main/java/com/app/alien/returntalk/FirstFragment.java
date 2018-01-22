@@ -298,6 +298,8 @@ public class FirstFragment extends Fragment  implements RippleView.RippleAnimati
                     is_tv_on = false;
 
                     mRippleView.stopRipple();
+                    mTextView.setText("리턴종료");
+
                     tv_debug.setText("Switch is off.....");
                     Toast.makeText(mContext, "문자자동응답이 종료되었습니다..", Toast.LENGTH_SHORT).show();
                     SharedPreferences prefs = getActivity().getSharedPreferences("pref", MODE_PRIVATE);
@@ -345,7 +347,10 @@ public class FirstFragment extends Fragment  implements RippleView.RippleAnimati
     @Override public void onAnimationUpdate(ValueAnimator animation) {
         float fraction = animation.getAnimatedFraction();
         int value = (int) (fraction * 100);
-        mTextView.setText(String.valueOf(value) + "%");
+        //mTextView.setText(String.valueOf(value) + "%");
+        if(value<30)            mTextView.setText("문자리턴중.");
+        else if(value<60)            mTextView.setText("문자리턴중..");
+        else        mTextView.setText("문자리턴중...");
     }
 
     @Override public void onAnimationStart(Animator animation) {

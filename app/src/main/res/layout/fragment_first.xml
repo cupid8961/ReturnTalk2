@@ -148,7 +148,7 @@
             app:radius="300"
             app:stroke_width="1"
             app:duration="3000"
-            app:repeat_count="999"
+            app:repeat_count="999999"
             app:two_ripple_times="1.5"
             app:three_ripple_times="2.0"
             app:max_more_radius_times="1.5"
