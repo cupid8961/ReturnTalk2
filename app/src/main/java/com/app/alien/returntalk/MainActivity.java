@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -91,6 +92,7 @@ public class MainActivity extends AppCompatActivity
                     return new FirstFragment();
                 }
                 case 1: {
+
                     return new SecondFragment();
                 }
 

@@ -14,6 +14,7 @@ public class Reply {
     private String phone_num;
     private String msg_client;
     private String msg_server; //필요는 없음
+    private int state; //0- 시작전 디폴트 , 1- 문자옴, 2 답장함,
 
     public int getState() {
         return state;
@@ -23,7 +24,6 @@ public class Reply {
         this.state = state;
     }
 
-    private int state; //0- 시작전 디폴트 , 1- 문자옴, 2 답장함,
 
     public Reply(int no_reply, int no_event, String name_event, long time_receive, String phone_num, String msg_client, String msg_server, int state) {
         this.no_reply = no_reply;

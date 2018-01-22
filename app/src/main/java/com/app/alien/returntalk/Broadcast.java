@@ -67,7 +67,7 @@ public class Broadcast extends BroadcastReceiver {
             SharedPreferences prefs = context.getSharedPreferences("pref", MODE_PRIVATE);
 
 
-            event_index = prefs.getInt("event_index",0);
+            event_index = prefs.getInt("event_index",-1);
 
             Log.i("returntalk","event_index : "+event_index);
             str_simple = prefs.getString("str_simple", "error");
@@ -124,7 +124,7 @@ public class Broadcast extends BroadcastReceiver {
             intent_blue.putExtra("state",2); //답장함
         }
         mContext.sendBroadcast(intent_blue);
-        Log.i("returntalk","listup_sms_blue: end /"+no_reply+" / "+isblue);
+        Log.i("returntalk","listup_sms_blue: end /no_reply:"+no_reply+" /state: "+isblue);
     }
 
 
@@ -134,14 +134,15 @@ public class Broadcast extends BroadcastReceiver {
         SharedPreferences.Editor editor = prefs.edit();
         int no_event = myReply.getNo_event();
 
-        editor.putInt("no_reply", myReply.getNo_reply() );
-        editor.putInt("no_event", myReply.getNo_event() );
-        editor.putString("name_event_"+no_event, myReply.getName_event() );
-        editor.putLong("time_receive_"+no_event, myReply.getTime_receive() );
-        editor.putString("phone_num_"+no_event, myReply.getPhone_num());
-        editor.putString("msg_client_"+no_event,myReply.getMsg_client());
-        editor.putString("msg_server_"+no_event,myReply.getMsg_server());
-        editor.putInt("state_"+no_event, myReply.getState());
+        //editor.putInt("no_event", myReply.getNo_event() );
+        editor.putString("name_event_"+no_event+"_"+myReply.getNo_reply(), myReply.getName_event() );
+        editor.putLong("time_receive_"+no_event+"_"+myReply.getNo_reply(), myReply.getTime_receive() );
+        editor.putString("phone_num_"+no_event+"_"+myReply.getNo_reply(), myReply.getPhone_num());
+        editor.putString("msg_client_"+no_event+"_"+myReply.getNo_reply(),myReply.getMsg_client());
+        editor.putString("msg_server_"+no_event+"_"+myReply.getNo_reply(),myReply.getMsg_server());
+        editor.putInt("state_"+no_event+"_"+myReply.getNo_reply(), myReply.getState());
+
+        editor.putInt("no_reply_index", myReply.getNo_reply()+1 );
         editor.commit();
     }
     private Reply makeReply(String phone_num,String msg_client) {
@@ -163,17 +164,18 @@ public class Broadcast extends BroadcastReceiver {
 
         //프레퍼런스불러오기
         SharedPreferences prefs = mContext.getSharedPreferences("pref", MODE_PRIVATE);
-        int no_reply = prefs.getInt("no_reply", 0); // 처음일수 있음
+        int no_reply_index = prefs.getInt("no_reply_index", 0); // 처음일수 있음
         int no_event = prefs.getInt("event_index", -1); //처음일 수 없음
         String name_event = prefs.getString("name_event", null); //처음일 수 없음
         String str_simple = prefs.getString("str_simple",null);//처음일 수 없음
 
 
-        Reply myReply = new Reply(no_reply,no_event,name_event,time_now.getTime(),phone_num,msg_client,str_simple,1);
+        Log.i("returntalk","makeReply / event_index:"+no_event);
+        Reply myReply = new Reply(no_reply_index,no_event,name_event,time_now.getTime(),phone_num,msg_client,str_simple,1);
 
         //문장 프레퍼런스 저장
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putInt("no_reply", ++no_reply);
+        editor.putInt("no_reply_index", ++no_reply_index);
         editor.commit();
 
         return myReply;
@@ -187,53 +189,9 @@ public class Broadcast extends BroadcastReceiver {
         PendingIntent sentIntent = PendingIntent.getBroadcast(mContext, 0, new Intent("SMS_SENT_ACTION"), 0);
         PendingIntent deliveredIntent = PendingIntent.getBroadcast(mContext, 0, new Intent("SMS_DELIVERED_ACTION"), 0);
 
-//        registerReceiver(new BroadcastReceiver() {
-//            @Override
-//            public void onReceive(Context context, Intent intent) {
-//                switch(getResultCode()){
-//                    case Activity.RESULT_OK:
-//                        // 전송 성공
-//                      Toast.makeText(mContext, "전송 완료", Toast.LENGTH_SHORT).show();
-//                        break;
-//                    case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
-//                        // 전송 실패
-//                      Toast.makeText(mContext, "전송 실패", Toast.LENGTH_SHORT).show();
-//                        break;
-//                    case SmsManager.RESULT_ERROR_NO_SERVICE:
-//                        // 서비스 지역 아님
-//                      Toast.makeText(mContext, "서비스 지역이 아닙니다", Toast.LENGTH_SHORT).show();
-//                        break;
-//                    case SmsManager.RESULT_ERROR_RADIO_OFF:
-//                        // 무선 꺼짐
-//                      Toast.makeText(mContext, "무선(Radio)가 꺼져있습니다", Toast.LENGTH_SHORT).show();
-//                        break;
-//                    case SmsManager.RESULT_ERROR_NULL_PDU:
-//                        // PDU 실패
-//                      Toast.makeText(mContext, "PDU Null", Toast.LENGTH_SHORT).show();
-//                        break;
-//                }
-//             }
-//        }, new IntentFilter("SMS_SENT_ACTION"));
-
-//        registerReceiver(new BroadcastReceiver() {
-//            @Override
-//            public void onReceive(Context context, Intent intent) {
-//                switch (getResultCode()){
-//                    case Activity.RESULT_OK:
-//                        // 도착 완료
-//                      Toast.makeText(mContext, "SMS 도착 완료", Toast.LENGTH_SHORT).show();
-//                        break;
-//                    case Activity.RESULT_CANCELED:
-//                        // 도착 안됨
-//                      Toast.makeText(mContext, "SMS 도착 실패", Toast.LENGTH_SHORT).show();
-//                        break;
-//                }
-//            }
-//        }, new IntentFilter("SMS_DELIVERED_ACTION"));
-
         SmsManager mSmsManager = SmsManager.getDefault();
         mSmsManager.sendTextMessage(smsNumber, null, smsText, sentIntent, deliveredIntent);
-
+        Log.i("returntalk","sendTextMessage complete.");
 
 
     }
