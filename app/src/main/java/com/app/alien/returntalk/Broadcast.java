@@ -92,7 +92,7 @@ public class Broadcast extends BroadcastReceiver {
                 if (message.contains("msg") ){// 디버깅용@ 나중엔 삭제해야함.
                     Log.i("returntalk","나에게 보냈음 /sendNumber:"+sendNumber+" / hardwareNumber:"+hardwareNumber);
                 }else{
-                    Reply myReply = makeReply(sendNumber,str_simple);// 리플객체 생성,
+                    Reply myReply = makeReply(sendNumber,message);// 리플객체 생성,
 
                     //sms_list 에 빨간색으로 올리기
                     listup_sms(myReply.getNo_reply(),1);
@@ -143,6 +143,9 @@ public class Broadcast extends BroadcastReceiver {
         editor.putInt("state_"+no_event+"_"+myReply.getNo_reply(), myReply.getState());
 
         editor.putInt("no_reply_index", myReply.getNo_reply()+1 );
+
+        Log.i("returntalk","msg_client_"+no_event+"_"+myReply.getNo_reply()+" : "+myReply.getMsg_client());
+
         editor.commit();
     }
     private Reply makeReply(String phone_num,String msg_client) {

@@ -31,7 +31,6 @@ import com.app.alien.component.CalendarUtils;
 import com.app.alien.component.ListViewAdapter;
 import com.app.alien.component.RippleView;
 
-import java.util.Calendar;
 import java.util.Date;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -51,7 +50,7 @@ public class FirstFragment extends Fragment  implements RippleView.RippleAnimati
     public static final String STRCOLOR_GRAY = "#AAAAAA";
     public static final String STRCOLOR_RED = "#FF6C6C";
     private ListView listview_msg;
-    private ListViewAdapter adapter_msg;
+    private ListViewAdapter lva_sms;
 
     private static int index_exam;
     private BroadcastReceiver myReceiver;
@@ -143,9 +142,8 @@ public class FirstFragment extends Fragment  implements RippleView.RippleAnimati
 
                 if(state ==1){
                     addMsgItem(mNo_event,no_reply);
-
                 }else if(state==2){
-                    changeSMS_Blue(mNo_event,no_reply);
+                    //changeSMS_Blue(mNo_event,no_reply);
                 }else{
                     Log.i("returntalk","sms_mReceiver / state error!!~@@");
 
@@ -164,11 +162,11 @@ public class FirstFragment extends Fragment  implements RippleView.RippleAnimati
 
 
         // Adapter 생성
-        adapter_msg = new ListViewAdapter() ;
+        lva_sms = new ListViewAdapter() ;
 
         // 리스트뷰 참조 및 Adapter달기
         listview_msg = (ListView) getView().findViewById(R.id.lv_sms);
-        listview_msg.setAdapter(adapter_msg);
+        listview_msg.setAdapter(lva_sms);
 
 
 
@@ -403,8 +401,9 @@ public class FirstFragment extends Fragment  implements RippleView.RippleAnimati
 
         Log.i("returntalk","changeSMS_Blue :"+no_event+" / "+no_reply);
         Log.i("returntalk","no_reply :"+no_reply+" /listview_msg.getCount() "+listview_msg.getCount());
-        adapter_msg.setItem(no_reply,null,listview_msg,2);
-        adapter_msg.notifyDataSetChanged();
+        //lva.setItem(no_reply,null,listview_msg,2);
+        //lva.setItem_s(listview_msg,no_reply,2); //빨강 변형.
+        lva_sms.notifyDataSetChanged();
     }
 
     private void addMsgItem(int no_event, int no_reply) {
@@ -420,10 +419,12 @@ public class FirstFragment extends Fragment  implements RippleView.RippleAnimati
         String now_time = CalendarUtils.ConvertMilliSecondsToFormattedDate(time_receive+"");
 
         // 첫 번째 아이템 추가.
-        adapter_msg.addItem(""+ no_reply,now_time,phonenum,msg_client);
-        adapter_msg.setItem(no_reply,null,listview_msg,1); //빨강 변형.
-        adapter_msg.notifyDataSetChanged();
-        setListViewHeightBasedOnChildren(listview_msg);
+        lva_sms.addItem(""+ no_reply,now_time,phonenum,msg_client);
+        setItem_s(listview_msg,no_reply,1); //빨강 변형.
+
+
+        lva_sms.notifyDataSetChanged();
+        //setListViewHeightBasedOnChildren(listview_msg);
     }
 
     @Override
@@ -475,6 +476,42 @@ public class FirstFragment extends Fragment  implements RippleView.RippleAnimati
 
     }
 
+    public void setItem_s(ListView listView,int no_reply, int state) {
+
+        ListViewAdapter listAdapter = (ListViewAdapter) listView.getAdapter();
+        if (listAdapter == null) {
+            // pre-condition
+            return;
+        }
+
+        int totalHeight = 0;
+
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.AT_MOST);
+
+
+
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+
+            View listItem = listAdapter.getView_s(i, null, listView , state);
+            Log.i("returntalk"," listAdapter.getCount i:"+i+"/ state: "+state);
+
+            listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+
+            totalHeight += listItem.getMeasuredHeight();
+
+        }
+
+
+
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+
+        listView.setLayoutParams(params);
+
+        listView.requestLayout();
+
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
