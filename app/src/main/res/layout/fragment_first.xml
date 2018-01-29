@@ -118,7 +118,7 @@
                     android:gravity="center_vertical|center_horizontal"
                     android:inputType="textPersonName"
                     android:padding="5dp"
-                    android:text="반환할 메세지를 입력하세요"
+                    android:text="자동 응답앱 개발 테스트중.."
                     android:textColor="#5285c4" />
 
                 <ImageButton

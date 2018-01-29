@@ -52,11 +52,12 @@ public class FirstFragment extends Fragment  implements RippleView.RippleAnimati
     private ListView listview_msg;
     private ListViewAdapter lva_sms;
 
-    private static int index_exam;
     private BroadcastReceiver myReceiver;
     private BroadcastReceiver sms_mReceiver;
     private int  mNo_event;
     private boolean is_tv_on ;
+    private String str_simple;
+    private int no_reply_index;
 
     private static final Boolean ISDEBUG =true;
 
@@ -69,11 +70,13 @@ public class FirstFragment extends Fragment  implements RippleView.RippleAnimati
 
     public FirstFragment()
     {
+        Log.i("returntalk", "FristFragment / FirstFragment()");
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
+        Log.i("returntalk", "FristFragment / onCreate");
         super.onCreate(savedInstanceState);
 
 
@@ -82,54 +85,78 @@ public class FirstFragment extends Fragment  implements RippleView.RippleAnimati
 
     }
 
-    private class pagerAdapter extends FragmentStatePagerAdapter
-    {
-        public pagerAdapter(android.support.v4.app.FragmentManager fm)
-        {
-            super(fm);
-        }
-        @Override
-        public android.support.v4.app.Fragment getItem(int position)
-        {
-            switch(position)
-            {
-                case 0:
-                    return new FirstFragment();
-                case 1:
-                    return new SecondFragment();
-                case 2:
-                    return new ThirdFragment();
-                default:
-                    return null;
-            }
-        }
-        @Override
-        public int getCount()
-        {
-            return 3;
-        }
+    @Override
+    public void onResume() {
+        Log.i("returntalk", "FristFragment / onResume");
+        super.onResume();
     }
-
 
     @Override
     public void onStart() {
+        Log.i("returntalk", "FristFragment / onStart");
         super.onStart();
 
         mContext = getActivity();
-        index_exam = 0;
-
-
-
-
         initView();
         initListener();
+        initVal();
+
+    }
+
+    private void initVal() {
+        Log.i("returntalk", "FristFragment / initVal");
+
+        SharedPreferences prefs = mContext.getSharedPreferences("pref", MODE_PRIVATE);
+        is_tv_on = prefs.getBoolean("state_launcher", false);
+        str_simple = prefs.getString("str_simple", "자동 응답앱 개발 테스트중..");
+        no_reply_index = prefs.getInt("no_reply_index", -1);
+        mNo_event = prefs.getInt("event_index", -1);
 
 
 
+        if(is_tv_on){
+            tv_on.setTextColor(Color.parseColor(STRCOLOR_BLUE));
+            tv_off.setTextColor(Color.parseColor(STRCOLOR_GRAY));
+
+        }else{
+            tv_on.setTextColor(Color.parseColor(STRCOLOR_GRAY));
+            tv_off.setTextColor(Color.parseColor(STRCOLOR_BLUE));
+        }
+        et_simple.setText(str_simple);
+
+
+        //lv_sms에 추가하기
+         for (int i =0; i<no_reply_index ; i++){
+
+             int my_state = prefs.getInt("state_"+mNo_event+"_"+i, -1);
+
+             if(my_state ==1){
+                 addMsgItem(mNo_event,i);
+                 Log.i("returntalk","sms_mReceiver /my_state ==1");
+             }else if(my_state==2){
+                 //changeSMS_Blue(mNo_event,no_reply);
+                 Log.i("returntalk","sms_mReceiver / my_state==2");
+             }else{
+                 Log.i("returntalk","sms_mReceiver / state error!!~@@");
+
+             }
+
+         }
+
+
+
+    }
+
+    private void initListener() {
+
+        // Adapter 생성
+        lva_sms = new ListViewAdapter() ;
 
         sms_mReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
+
+
 
                 SharedPreferences prefs = mContext.getSharedPreferences("pref", MODE_PRIVATE);
                 mNo_event = prefs.getInt("event_index", -1);
@@ -153,36 +180,9 @@ public class FirstFragment extends Fragment  implements RippleView.RippleAnimati
         };
 
 
-
-
-
-
-
-
-
-
-        // Adapter 생성
-        lva_sms = new ListViewAdapter() ;
-
-        // 리스트뷰 참조 및 Adapter달기
-        listview_msg = (ListView) getView().findViewById(R.id.lv_sms);
         listview_msg.setAdapter(lva_sms);
-
-
-
-        tv_on = (TextView) getView().findViewById(R.id.tv_on);
-        tv_off = (TextView) getView().findViewById(R.id.tv_off);
-        is_tv_on = false;
-
-        tv_debug = (TextView)  getView().findViewById(R.id.tv_debug);
-        //et_msg_simple = (EditText) getView().findViewById(R.id.et_msg_simple);
-
-        et_simple = (EditText)getView().findViewById(R.id.et_simple);
-        if(ISDEBUG) et_simple.setText("자동 응답앱 개발 테스트중..");
-
-         et_event_name = (EditText)getView().findViewById(R.id.et_event_name);
-
-        btn_option =(ImageButton)  getView().findViewById(R.id.btn_option);
+        Log.i("returntalk", "FristFragment / initListener()");
+        mRippleView.setRippleStateListener(this);
         btn_option.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Perform action on click
@@ -191,7 +191,6 @@ public class FirstFragment extends Fragment  implements RippleView.RippleAnimati
         });
 
 
-        btn_pt_pn =(ImageButton)  getView().findViewById(R.id.btn_pt_pn);
         btn_pt_pn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Perform action on click
@@ -212,6 +211,9 @@ public class FirstFragment extends Fragment  implements RippleView.RippleAnimati
                     Toast.makeText(mContext, "이미 시작되었습니다.", Toast.LENGTH_SHORT).show();
                     return ;
                 }else {
+
+                    lva_sms.clear_all();
+                    lva_sms.notifyDataSetChanged();
 
                     mRippleView.startRipple();
 
@@ -329,15 +331,25 @@ public class FirstFragment extends Fragment  implements RippleView.RippleAnimati
 
             }
         });
-    }
 
-    private void initListener() {
-        mRippleView.setRippleStateListener(this);
     }
 
     private void initView() {
+
+        Log.i("returntalk", "FristFragment / initView");
         mRippleView = (RippleView) getView().findViewById(R.id.root_rv);
         mTextView = (TextView) getView().findViewById(R.id.root_tv);
+
+        // 리스트뷰 참조 및 Adapter달기
+        listview_msg = (ListView) getView().findViewById(R.id.lv_sms);
+        tv_on = (TextView) getView().findViewById(R.id.tv_on);
+        tv_off = (TextView) getView().findViewById(R.id.tv_off);
+        tv_debug = (TextView)  getView().findViewById(R.id.tv_debug);
+        et_simple = (EditText)getView().findViewById(R.id.et_simple);
+        et_event_name = (EditText)getView().findViewById(R.id.et_event_name);
+
+        btn_option =(ImageButton)  getView().findViewById(R.id.btn_option);
+        btn_pt_pn =(ImageButton)  getView().findViewById(R.id.btn_pt_pn);
     }
 
 
@@ -419,8 +431,8 @@ public class FirstFragment extends Fragment  implements RippleView.RippleAnimati
         String now_time = CalendarUtils.ConvertMilliSecondsToFormattedDate(time_receive+"");
 
         // 첫 번째 아이템 추가.
-        lva_sms.addItem(""+ no_reply,now_time,phonenum,msg_client);
-        setItem_s(listview_msg,no_reply,1); //빨강 변형.
+        lva_sms.addItem(""+ (no_reply+1),now_time,phonenum,msg_client);
+        setItem_s(listview_msg,no_reply,2); //일단 파랑으로 다넣기@@
 
 
         lva_sms.notifyDataSetChanged();
@@ -430,6 +442,7 @@ public class FirstFragment extends Fragment  implements RippleView.RippleAnimati
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
+        Log.i("returntalk", "FristFragment / onCreateView");
         RelativeLayout layout = (RelativeLayout) inflater.inflate(R.layout.fragment_first, container, false);
         return layout;
 

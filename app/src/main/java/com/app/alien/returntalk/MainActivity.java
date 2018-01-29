@@ -28,6 +28,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+
+        Log.i("returntalk", "MainActivity / onCreate");
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -91,14 +93,16 @@ public class MainActivity extends AppCompatActivity
             switch(position)
             {
                 case 0: {
+                    Log.i("returntalk", "MainActivity / pagerAdapter / case : 0");
                     return new FirstFragment();
                 }
                 case 1: {
-
+                    Log.i("returntalk", "MainActivity / pagerAdapter / case : 1");
                     return new SecondFragment();
                 }
 
                 case 2:
+                    Log.i("returntalk", "MainActivity / pagerAdapter / case : 2");
                     return new ThirdFragment();
                 default:
                     return null;
@@ -114,11 +118,14 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onDestroy() {
+
+        Log.i("returntalk", "MainActivity / onDestroy");
         super.onDestroy();
     }
 
     @Override
     protected void onPause() {
+        Log.i("returntalk", "MainActivity / onPause");
         super.onPause();
 
     }
