@@ -107,11 +107,21 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
+                <ImageButton
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="25dp"
+                    android:layout_marginTop="25dp"
+                    android:background="@android:color/transparent"
+                    android:gravity="center_horizontal"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/message"
+                    android:visibility="invisible" />
+
                 <EditText
                     android:id="@+id/et_simple"
                     android:layout_width="match_parent"
                     android:layout_height="70dp"
-                    android:layout_marginLeft="20dp"
                     android:layout_weight="1"
                     android:background="@drawable/rectangle"
                     android:ems="10"

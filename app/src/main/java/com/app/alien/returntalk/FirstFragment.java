@@ -117,10 +117,14 @@ public class FirstFragment extends Fragment  implements RippleView.RippleAnimati
         if(is_tv_on){
             tv_on.setTextColor(Color.parseColor(STRCOLOR_BLUE));
             tv_off.setTextColor(Color.parseColor(STRCOLOR_GRAY));
+            mRippleView.startRipple();
 
         }else{
             tv_on.setTextColor(Color.parseColor(STRCOLOR_GRAY));
             tv_off.setTextColor(Color.parseColor(STRCOLOR_BLUE));
+            mRippleView.stopRipple();
+            mTextView.setText("리턴종료");
+
         }
         et_simple.setText(str_simple);
 
