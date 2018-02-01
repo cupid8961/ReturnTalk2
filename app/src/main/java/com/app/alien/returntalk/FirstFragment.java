@@ -59,7 +59,7 @@ public class FirstFragment extends Fragment  implements RippleView.RippleAnimati
     private String str_simple;
     private int no_reply_index;
 
-    private static final Boolean ISDEBUG =true;
+    public static final Boolean ISDEBUG =false;
 
     //rippleview
     private RippleView mRippleView;
