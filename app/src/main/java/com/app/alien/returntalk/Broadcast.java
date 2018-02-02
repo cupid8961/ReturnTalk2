@@ -23,6 +23,7 @@ public class Broadcast extends BroadcastReceiver {
     private Context mContext;
     private String str_simple;
     private boolean state_launcher;
+    private int is_tv_on;
     private int event_index;
 
     @Override
@@ -71,7 +72,7 @@ public class Broadcast extends BroadcastReceiver {
 
             Log.i("returntalk", "event_index : " + event_index);
             str_simple = prefs.getString("str_simple", "error");
-            state_launcher = prefs.getBoolean("state_launcher", false);
+            is_tv_on = prefs.getInt("state_launcher", 2);
 
 
             //자신의 전화번호와 비교하기
@@ -87,7 +88,7 @@ public class Broadcast extends BroadcastReceiver {
             }
 
 
-            if (state_launcher) {
+            if (is_tv_on==0) {
 
 
                 if (FirstFragment.ISDEBUG) { //디버깅_개발자용

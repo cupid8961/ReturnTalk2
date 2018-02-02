@@ -55,11 +55,11 @@ public class FirstFragment extends Fragment  implements RippleView.RippleAnimati
     private BroadcastReceiver myReceiver;
     private BroadcastReceiver sms_mReceiver;
     private int  mNo_event;
-    private boolean is_tv_on ;
+    private int is_tv_on ;
     private String str_simple;
     private int no_reply_index;
 
-    public static final Boolean ISDEBUG =false;
+    public static final Boolean ISDEBUG =true;
 
     //rippleview
     private RippleView mRippleView;
@@ -107,23 +107,30 @@ public class FirstFragment extends Fragment  implements RippleView.RippleAnimati
         Log.i("returntalk", "FristFragment / initVal");
 
         SharedPreferences prefs = mContext.getSharedPreferences("pref", MODE_PRIVATE);
-        is_tv_on = prefs.getBoolean("state_launcher", false);
+        is_tv_on = prefs.getInt("state_launcher", 2);
         str_simple = prefs.getString("str_simple", "자동 응답앱 개발 테스트중..");
         no_reply_index = prefs.getInt("no_reply_index", -1);
         mNo_event = prefs.getInt("event_index", -1);
 
 
+        Log.i("returntalk","FirstFragment / is_tv_on : "+is_tv_on);
 
-        if(is_tv_on){
+        if(is_tv_on==0){
             tv_on.setTextColor(Color.parseColor(STRCOLOR_BLUE));
             tv_off.setTextColor(Color.parseColor(STRCOLOR_GRAY));
             mRippleView.startRipple();
+
+        }else if(is_tv_on==1) {
+            tv_on.setTextColor(Color.parseColor(STRCOLOR_GRAY));
+            tv_off.setTextColor(Color.parseColor(STRCOLOR_BLUE));
+            mRippleView.stopRipple();
+            mTextView.setText("리턴종료");
 
         }else{
             tv_on.setTextColor(Color.parseColor(STRCOLOR_GRAY));
             tv_off.setTextColor(Color.parseColor(STRCOLOR_BLUE));
             mRippleView.stopRipple();
-            mTextView.setText("리턴종료");
+            mTextView.setText("Return Talk");
 
         }
         et_simple.setText(str_simple);
@@ -210,7 +217,7 @@ public class FirstFragment extends Fragment  implements RippleView.RippleAnimati
             public void onClick(View v) {
                 // Perform action on click
                 //Do something when Switch button is on/checked
-                if (is_tv_on){
+                if (is_tv_on==0){
 
                     Toast.makeText(mContext, "이미 시작되었습니다.", Toast.LENGTH_SHORT).show();
                     return ;
@@ -221,7 +228,7 @@ public class FirstFragment extends Fragment  implements RippleView.RippleAnimati
 
                     mRippleView.startRipple();
 
-                    is_tv_on = true;
+                    is_tv_on = 0;
                     tv_debug.setText("Switch is on.....");
 
                     Toast.makeText(mContext, "문자자동응답이 시작되었습니다.", Toast.LENGTH_SHORT).show();
@@ -262,7 +269,7 @@ public class FirstFragment extends Fragment  implements RippleView.RippleAnimati
                     editor.putInt("event_index", event_index);
                     editor.putInt("no_reply_index", 0);
                     editor.putString("str_simple", et_simple.getText().toString());
-                    editor.putBoolean("state_launcher", true);
+                    editor.putInt("state_launcher", 0);
                     editor.putLong("time_start", time_now.getTime());
                     editor.putString("name_event", et_event_name.getText().toString());
 
@@ -278,6 +285,7 @@ public class FirstFragment extends Fragment  implements RippleView.RippleAnimati
 
 
                     Log.i("returntalk", "registerReceiver");
+
                 }
             }
         });
@@ -293,13 +301,13 @@ public class FirstFragment extends Fragment  implements RippleView.RippleAnimati
                 // Perform action on click
                 //Do something when Switch is off/unchecked
 
-                if (!is_tv_on){
+                if (is_tv_on!=0){
 
                     Toast.makeText(mContext, "이미 정지되어 있습니다.", Toast.LENGTH_SHORT).show();
                     return ;
                 }
                 else {
-                    is_tv_on = false;
+                    is_tv_on = 1;
 
                     mRippleView.stopRipple();
                     mTextView.setText("리턴종료");
@@ -315,7 +323,7 @@ public class FirstFragment extends Fragment  implements RippleView.RippleAnimati
 
                     //문장 프레퍼런스 저장
                     SharedPreferences.Editor editor = prefs.edit();
-                    editor.putBoolean("state_launcher", false);
+                    editor.putInt("state_launcher", 1);
                     editor.putLong("time_end", time_now.getTime());
                     editor.putInt("event_index", ++event_index);
                     editor.putInt("no_reply_index", 0);
@@ -537,6 +545,27 @@ public class FirstFragment extends Fragment  implements RippleView.RippleAnimati
             // YES!!
             Log.i("returntalk", "MY_PERMISSIONS_REQUEST_SMS_RECEIVE --> YES");
         }
+    }
+
+    public void click_tv_off(){
+        tv_off.performClick();
+        return ;
+    }
+
+    public void set_Main_message(String str) {
+
+        mTextView.setText(str);
+    }
+
+    public void change_launcher_state() {
+
+        SharedPreferences prefs = getActivity().getSharedPreferences("pref", MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        //editor.putString("str_simple", et_msg_simple.getText().toString());
+
+        editor.putInt("state_launcher", 2);
+        editor.commit();
+
     }
 }
 

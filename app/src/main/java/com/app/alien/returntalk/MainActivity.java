@@ -1,16 +1,23 @@
 package com.app.alien.returntalk;
 
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -24,6 +31,7 @@ public class MainActivity extends AppCompatActivity
     Button btn_second;
     Button btn_third;
     Context mContext;
+    FirstFragment FirstFragment01 ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -108,7 +116,8 @@ public class MainActivity extends AppCompatActivity
             {
                 case 0: {
                     Log.i("returntalk", "MainActivity / pagerAdapter / case : 0");
-                    return new FirstFragment();
+                    FirstFragment01 = new FirstFragment();
+                    return FirstFragment01;
                 }
                 case 1: {
                     Log.i("returntalk", "MainActivity / pagerAdapter / case : 1");
@@ -137,6 +146,7 @@ public class MainActivity extends AppCompatActivity
 
         Log.i("returntalk", "MainActivity / onDestroy");
         super.onDestroy();
+
     }
 
     @Override
@@ -145,4 +155,72 @@ public class MainActivity extends AppCompatActivity
         super.onPause();
 
     }
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        Log.i("returntalk", "MainActivity / onBackPressed");
+
+        // 현재 동작중인지 확인
+        SharedPreferences prefs = mContext.getSharedPreferences("pref", MODE_PRIVATE);
+        int is_tv_on = prefs.getInt("state_launcher", 2);
+
+        if(is_tv_on==0) show_exit_dialog(); //동작중일때만 다이얼로그 생성
+        else{ // 아닐때는 걍꺼짐.
+            super.onBackPressed();
+        }
+
+    }
+
+    private void show_exit_dialog() {
+        final AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+
+        alertDialog.setTitle("Dialog Button");
+        // 제목셋팅
+        alertDialog.setTitle("프로그램 종료");
+        alertDialog.setMessage("프로그램을 종료하시려면 아래 버튼을 누르세요.");
+
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "자동응답을 취소하고 종료", new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int id) {
+                FirstFragment01.click_tv_off();
+                FirstFragment01.change_launcher_state();
+
+
+                moveTaskToBack(true);
+                finish();
+                android.os.Process.killProcess(android.os.Process.myPid());
+
+
+            } });
+
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "자동응답을 유지한채 종료", new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int id) {
+                Intent intent = new Intent();
+                intent.setAction("android.intent.action.MAIN");
+                intent.addCategory("android.intent.category.HOME");
+                intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
+                        | Intent.FLAG_ACTIVITY_FORWARD_RESULT
+                        | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP
+                        | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+                startActivity(intent);
+
+
+            }});
+
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "돌아가기", new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int id) {
+                alertDialog.dismiss();
+            }});
+
+        // 다이얼로그 보여주기
+        if (!MainActivity.this.isFinishing()) {
+            alertDialog.show();
+        }
+
+
+    }
+
 }
