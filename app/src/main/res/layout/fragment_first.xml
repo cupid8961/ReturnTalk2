@@ -86,6 +86,33 @@
                 android:layout_height="0.3dp"
                 android:background="#5285c4" />
 
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <Button
+                    android:id="@+id/btn_goFragment03"
+                    style="@style/button_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_shadow"
+                    android:stateListAnimator="@null"
+                    android:text="리턴톡 입력"
+                    android:textColor="#ffffff"
+                    android:textSize="20dp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginRight="30dp"
+                    android:gravity="right|center_vertical|center_horizontal"
+                    app:srcCompat="@drawable/move" />
+
+
+            </FrameLayout>
+
+            <!--
             <EditText
                 android:id="@+id/et_event_name"
                 android:layout_width="match_parent"
@@ -99,7 +126,7 @@
                 android:inputType="textPersonName"
                 android:text="모임명을 입력하세요."
                 android:textColor="#5285c4" />
-
+-->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -107,40 +134,16 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <ImageButton
+                <TextView
+                    android:id="@+id/tv_simple"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="25dp"
-                    android:layout_marginTop="25dp"
-                    android:background="@android:color/transparent"
-                    android:gravity="center_horizontal"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/message"
-                    android:visibility="invisible" />
-
-                <EditText
-                    android:id="@+id/et_simple"
-                    android:layout_width="match_parent"
-                    android:layout_height="70dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="@drawable/rectangle"
                     android:ems="10"
                     android:gravity="center_vertical|center_horizontal"
-                    android:inputType="textPersonName"
                     android:padding="5dp"
-                    android:text="자동 응답앱 개발 테스트중.."
+                    android:text="리턴톡을 입력하세요.."
                     android:textColor="#5285c4" />
-
-                <ImageButton
-                    android:id="@+id/btn_modi"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="25dp"
-                    android:layout_marginTop="25dp"
-                    android:background="@android:color/transparent"
-                    android:gravity="center_horizontal"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/message" />
 
             </LinearLayout>
 
