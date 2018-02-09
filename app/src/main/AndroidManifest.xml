@@ -29,6 +29,7 @@
         <activity android:name=".PresentationActivity"
             android:screenOrientation="landscape">
         </activity>
+        <activity android:name=".EventdetailActivity" android:theme="@android:style/Theme.Dialog" />
 
 
         <receiver android:name ="com.app.alien.returntalk.Broadcast">

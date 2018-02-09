@@ -23,6 +23,7 @@ public class ThirdFragment extends Fragment {
     private Context mContext;
     private EditText et_event_name_f3, et_msg_simple_f3;
     private TextView tv_f3_confirm;
+    private int event_no;
 
     public ThirdFragment() {
     }
@@ -77,8 +78,10 @@ public class ThirdFragment extends Fragment {
                     SharedPreferences.Editor editor = prefs.edit();
                     //editor.putString("str_simple", et_msg_simple.getText().toString());
 
+                    event_no = prefs.getInt("event_index", 0);
+
                     editor.putString("str_simple", et_msg_simple_f3.getText().toString());
-                    editor.putString("name_event", et_event_name_f3.getText().toString());
+                    editor.putString("name_event_"+event_no, et_event_name_f3.getText().toString());
                     editor.putInt("state_launcher", 2);
                     editor.commit();
                     MainActivity.start_fragment(0);

@@ -48,6 +48,47 @@ public class MainActivity extends AppCompatActivity {
         vp.setCurrentItem(0);
 
 
+        vp.addOnPageChangeListener(new ViewPager.OnPageChangeListener()
+        {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels)
+            {
+
+                //Log.i("returntalk", "MainActivity / onPageScrolled/position:"+position);
+            }
+
+            @Override
+            public void onPageSelected(int position)
+            {
+                int i = 0;
+                while(i<3)
+                {
+                    if(position==i)
+                    {
+
+                        Log.i("returntalk", "MainActivity / onPageSelected/position:"+position);
+                        if(position==1){
+                            refresh_FragmentVal(position);
+                        }
+                    }
+                    else
+                    {
+                        //ll.findViewWithTag(i).setSelected(false);
+                    }
+                    i++;
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state)
+            {
+
+                Log.i("returntalk", "MainActivity / onPageScrollStateChanged/state:"+state);
+            }
+        });
+
+
+
         btn_first.setOnClickListener(movePageListener);
         btn_first.setTag(0);
 
@@ -68,10 +109,18 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void refresh_FragmentVal(int position) {
+        if(position==1){
+            fragment02.initVal();
+        }
+    }
+
 
     View.OnClickListener movePageListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+
+            Log.i("returntalk", "MainActivity / movePageListener / swap : "+v.getTag());
             int tag = (int) v.getTag();
             vp.setCurrentItem(tag);
             changeTextColor(tag);

@@ -110,9 +110,8 @@ public class FirstFragment extends Fragment  implements RippleView.RippleAnimati
         is_tv_on = prefs.getInt("state_launcher", 3);
         str_simple = prefs.getString("str_simple", "자동 응답앱 개발 테스트중..");
         no_reply_index = prefs.getInt("no_reply_index", -1);
-        mNo_event = prefs.getInt("event_index", -1);
-
-        name_event = prefs.getString("name_event", "이벤트명이 없습니다.");
+        mNo_event = prefs.getInt("event_index", 0);
+        name_event = prefs.getString("name_event_"+mNo_event, "이벤트명이 없습니다.");
 
         Log.i("returntalk","FirstFragment / is_tv_on : "+is_tv_on);
 
@@ -275,7 +274,7 @@ public class FirstFragment extends Fragment  implements RippleView.RippleAnimati
                     editor.putInt("event_index", event_index);
                     editor.putInt("no_reply_index", 0);
                     editor.putInt("state_launcher", 0);
-                    editor.putLong("time_start", time_now.getTime());
+                    editor.putLong("time_start_"+mNo_event, time_now.getTime());
 
                     Log.i("returntalk", "현재저장되는 event_index : " + event_index);
                     editor.commit();
@@ -320,17 +319,21 @@ public class FirstFragment extends Fragment  implements RippleView.RippleAnimati
                     Toast.makeText(mContext, "문자자동응답이 종료되었습니다..", Toast.LENGTH_SHORT).show();
                     SharedPreferences prefs = getActivity().getSharedPreferences("pref", MODE_PRIVATE);
                     int event_index = prefs.getInt("event_index", 0);
+                    int cnt_reply =  prefs.getInt("no_reply_index", 0);
 
 
                     //현재시간 가져오기
                     Date time_now = new Date();
-
+                    event_index++;
+                    Log.i("returntalk","firstFragment / tv_off/ event_index :"+event_index);
                     //문장 프레퍼런스 저장
                     SharedPreferences.Editor editor = prefs.edit();
                     editor.putInt("state_launcher", 1);
-                    editor.putLong("time_end", time_now.getTime());
-                    editor.putInt("event_index", ++event_index);
+                    editor.putLong("time_end_"+mNo_event, time_now.getTime());
+                    editor.putString("name_event_"+mNo_event, name_event);//cnt_reply
+                    editor.putInt("event_index", event_index);
                     editor.putInt("no_reply_index", 0);
+                    editor.putInt("cnt_reply_"+mNo_event, cnt_reply);//cnt_reply
                     editor.commit();
 
 
@@ -340,6 +343,7 @@ public class FirstFragment extends Fragment  implements RippleView.RippleAnimati
 
                     //문자오는지 리시버로 감시해제
                     unregist_all_Receiver();
+
 
 
                     Log.i("returntalk", "tv_off");

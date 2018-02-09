@@ -2,10 +2,13 @@ package com.app.alien.returntalk;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,11 +25,15 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import static android.app.Activity.RESULT_OK;
+import static android.content.Context.MODE_PRIVATE;
+
 
 public class SecondFragment extends Fragment
 {
     //private    ArrayList<Message> arrayList_SMS ;
     private    TextView tv_debug;
+    private Context mContext;
 
     public SecondFragment()
     {
@@ -35,78 +42,42 @@ public class SecondFragment extends Fragment
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-
-
-
-
     }
-//sms문자내역 가져오는 코드입니다.
-/*
-    public int readSMSMessage() {
-        Uri allMessage = Uri.parse("content://sms");
-        ContentResolver cr = getActivity().getContentResolver();
-        Cursor c = cr.query(allMessage,
-                new String[]{"_id", "thread_id", "address", "person", "date", "body"},
-                null, null,
-                "date DESC");
-
-        while (c.moveToNext()) {
-            Message msg = new Message(); // 따로 저는 클래스를 만들어서 담아오도록 했습니다.
-
-            long messageId = c.getLong(0);
-            msg.setMessageId(String.valueOf(messageId));
-
-            long threadId = c.getLong(1);
-            msg.setThreadId(String.valueOf(threadId));
-
-            String address = c.getString(2);
-            msg.setAddress(address);
-
-            long contactId = c.getLong(3);
-            msg.setContactId(String.valueOf(contactId));
-
-            String contactId_string = String.valueOf(contactId);
-            msg.setContactId_string(contactId_string);
-
-            long timestamp = c.getLong(4);
-            msg.setTimestamp(String.valueOf(timestamp));
-
-            String body = c.getString(5);
-            msg.setBody(body);
-
-            arrayList_SMS.add(msg); //이부분은 제가 arraylist에 담으려고 하기떄문에 추가된부분이며 수정가능합니다.
-
-        }
-        return 0;
-    }
-    */
 
     @Override
     public void onStart() {
         super.onStart();
-
-        tv_debug= (TextView)getView().findViewById(R.id.tv_sec_debug);
-
-
-        long time = System.currentTimeMillis();
-        SimpleDateFormat dayTime = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
-        String date_now = dayTime.format(new Date(time));
+        mContext = getActivity();
 
 
-        tv_debug.setText("now time : "+ date_now);
 
-        int img[] = {
-                R.drawable.img_mail,R.drawable.img_mail,R.drawable.img_mail,R.drawable.img_mail,R.drawable.img_mail,R.drawable.img_mail,R.drawable.img_mail,R.drawable.img_mail,R.drawable.img_mail,R.drawable.img_mail
-        };
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        initView();
+        initListener();
+        initVal();
+
+    }
+
+    public void initVal() {
+
+        SharedPreferences prefs = getActivity().getSharedPreferences("pref", MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        int state_launcher = prefs.getInt("state_launcher", -1);
+        int event_index = prefs.getInt("event_index", -1);
+        Log.i("returntalk", "secondFragment/initVal/event_index : "+event_index);
 
         // 커스텀 아답타 생성
-        MyAdapter adapter = new MyAdapter ( getActivity(),   R.layout.row_event,   img);
+        MyAdapter adapter = new MyAdapter ( getActivity(),   R.layout.row_event,   event_index);
 
-       // GridView gv = (GridView)getView().findViewById(R.id.gv_01);
+        // GridView gv = (GridView)getView().findViewById(R.id.gv_01);
         ExpandableHeightGridView mAppsGrid = (ExpandableHeightGridView) getView().findViewById(R.id.gv_01);
         mAppsGrid.setExpanded(true);
-
-
         mAppsGrid.setAdapter(adapter);  // 커스텀 아답타를 GridView 에 적용
 
 
@@ -117,8 +88,34 @@ public class SecondFragment extends Fragment
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 tv_debug.setText("position : " + position);
+                Intent intent = new Intent(mContext, EventdetailActivity.class);
+                intent.putExtra("data", "Test Popup");
+                startActivityForResult(intent, 1);
+
+
             }
         });
+
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode==1){
+            if(resultCode==RESULT_OK){
+                //데이터 받기
+                String result = data.getStringExtra("result");
+                tv_debug.setText(result);
+            }
+        }
+    }
+
+    public void initListener() {
+
+    }
+
+    public void initView() {
+
+        tv_debug= (TextView)getView().findViewById(R.id.tv_sec_debug);
+
 
     }
 
@@ -128,28 +125,36 @@ public class SecondFragment extends Fragment
         RelativeLayout layout = (RelativeLayout) inflater.inflate(R.layout.fragment_second, container, false);
         return layout;
     }
+
+    public void refreshVal() {
+
+    }
+
+
     class MyAdapter extends BaseAdapter {
         Context context;
         int layout;
-        int img[];
+        int event_cnt;
         LayoutInflater inf;
+        ImageView iv;
+        TextView tv_event_name_f2,   tv_reply_cnt_f2;
 
-        public MyAdapter(Context context, int layout, int[] img) {
+        public MyAdapter(Context context, int layout, int event_cnt) {
             this.context = context;
             this.layout = layout;
-            this.img = img;
+            this.event_cnt = event_cnt;
             inf = (LayoutInflater) context.getSystemService
                     (Context.LAYOUT_INFLATER_SERVICE);
         }
 
         @Override
         public int getCount() {
-            return img.length;
+            return event_cnt;
         }
 
         @Override
         public Object getItem(int position) {
-            return img[position];
+            return R.drawable.img_mail;
         }
 
         @Override
@@ -161,8 +166,23 @@ public class SecondFragment extends Fragment
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView==null)
                 convertView = inf.inflate(layout, null);
-            ImageView iv = (ImageView)convertView.findViewById(R.id.imageView1);
-            iv.setImageResource(img[position]);
+            iv = (ImageView)convertView.findViewById(R.id.imageView1);
+            tv_event_name_f2= (TextView)convertView.findViewById(R.id.tv_event_name_f2);
+            tv_reply_cnt_f2= (TextView)convertView.findViewById(R.id.tv_reply_cnt_f2);
+
+
+
+
+
+            SharedPreferences prefs = mContext.getSharedPreferences("pref", MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+
+            String event_name = prefs.getString("name_event_"+position, "error");
+            int cnt_reply =  prefs.getInt("cnt_reply_"+position, 0);
+
+            tv_reply_cnt_f2.setText(""+cnt_reply);
+            tv_event_name_f2.setText(event_name);
+            iv.setImageResource(R.drawable.img_mail);
 
             return convertView;
         }

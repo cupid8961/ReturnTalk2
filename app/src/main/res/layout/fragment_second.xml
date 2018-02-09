@@ -14,7 +14,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <Button
                 android:id="@+id/button4"
@@ -46,19 +47,31 @@
                 android:text="삭제" />
         </LinearLayout>
 
-        <ScrollView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fillViewport="true"
-            android:background="#55ff55">
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tv_sec_debug"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="GridView 활용"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-        </ScrollView>
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Return Talk" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="당신의 소식을 모임별로 활용해보세요" />
+
+            <TextView
+                android:id="@+id/tv_sec_debug"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="tv_sec_debug"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:visibility="visible" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -71,35 +84,20 @@
                 android:layout_height="wrap_content"
                 android:fillViewport="true"
                 android:background="#118866">
-<!--
-                <GridView
-                    android:id="@+id/gv_01"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginBottom="15dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:horizontalSpacing="10dp"
-                    android:isScrollContainer="false"
-                    android:stretchMode="columnWidth"
-                    android:verticalSpacing="10dp"
-                    android:numColumns="3"
-                    />
-                    -->
+
 
                 <com.app.alien.returntalk.ExpandableHeightGridView
                     android:id="@+id/gv_01"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginBottom="15dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginBottom="0dp"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:horizontalSpacing="10dp"
                     android:isScrollContainer="false"
                      android:stretchMode="columnWidth"
-                    android:verticalSpacing="10dp"
+                    android:verticalSpacing="0dp"
                     android:numColumns="3"
                     />
             </ScrollView>
