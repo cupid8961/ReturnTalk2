@@ -89,7 +89,7 @@ public class SecondFragment extends Fragment
                                     int position, long id) {
                 tv_debug.setText("position : " + position);
                 Intent intent = new Intent(mContext, EventdetailActivity.class);
-                intent.putExtra("data", "Test Popup");
+                intent.putExtra("event_index", position);
                 startActivityForResult(intent, 1);
 
 

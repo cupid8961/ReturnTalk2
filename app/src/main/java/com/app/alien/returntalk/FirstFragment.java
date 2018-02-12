@@ -106,6 +106,10 @@ public class FirstFragment extends Fragment  implements RippleView.RippleAnimati
     private void initVal() {
         Log.i("returntalk", "FristFragment / initVal");
 
+        lva_sms = new ListViewAdapter() ;
+        listview_msg.setAdapter(lva_sms);
+
+
         SharedPreferences prefs = mContext.getSharedPreferences("pref", MODE_PRIVATE);
         is_tv_on = prefs.getInt("state_launcher", 3);
         str_simple = prefs.getString("str_simple", "자동 응답앱 개발 테스트중..");
@@ -165,9 +169,7 @@ public class FirstFragment extends Fragment  implements RippleView.RippleAnimati
 
     private void initListener() {
 
-        // Adapter 생성
-        lva_sms = new ListViewAdapter() ;
-
+        // Adapter 생성;
         sms_mReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -196,7 +198,7 @@ public class FirstFragment extends Fragment  implements RippleView.RippleAnimati
         };
 
 
-        listview_msg.setAdapter(lva_sms);
+
         Log.i("returntalk", "FristFragment / initListener()");
         mRippleView.setRippleStateListener(this);
         btn_option.setOnClickListener(new View.OnClickListener() {
@@ -463,7 +465,7 @@ public class FirstFragment extends Fragment  implements RippleView.RippleAnimati
 
         // 첫 번째 아이템 추가.
         lva_sms.addItem(""+ (no_reply+1),now_time,phonenum,msg_client);
-        setItem_s(listview_msg,no_reply,2); //일단 파랑으로 다넣기@@
+        setItem_s(listview_msg,no_reply,2);
 
 
         lva_sms.notifyDataSetChanged();
