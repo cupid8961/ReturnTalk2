@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
                     {
 
                         Log.i("returntalk", "MainActivity / onPageSelected/position:"+position);
+                        changeTextColor(i);
                         if(position==1){
                             refresh_FragmentVal(position);
                         }
@@ -83,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
             public void onPageScrollStateChanged(int state)
             {
 
-                Log.i("returntalk", "MainActivity / onPageScrollStateChanged/state:"+state);
+               // Log.i("returntalk", "MainActivity / onPageScrollStateChanged/state:"+state);
             }
         });
 
@@ -128,13 +129,17 @@ public class MainActivity extends AppCompatActivity {
     };
 
     private void changeTextColor(int tag) {
-        if (tag == 1) {
+        if (tag == 0) {
 
             btn_first.setTextColor(Color.parseColor(FirstFragment.STRCOLOR_BLUE));
             btn_second.setTextColor(Color.parseColor(FirstFragment.STRCOLOR_GRAY));
 
+        } else if(tag==1) {
+            btn_second.setTextColor(Color.parseColor(FirstFragment.STRCOLOR_BLUE));
+            btn_first.setTextColor(Color.parseColor(FirstFragment.STRCOLOR_GRAY));
+
         } else {
-            btn_first.setTextColor(Color.parseColor(FirstFragment.STRCOLOR_BLUE));
+            btn_first.setTextColor(Color.parseColor(FirstFragment.STRCOLOR_GRAY));
             btn_second.setTextColor(Color.parseColor(FirstFragment.STRCOLOR_GRAY));
 
         }

@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -34,6 +35,7 @@ public class SecondFragment extends Fragment
     //private    ArrayList<Message> arrayList_SMS ;
     private    TextView tv_debug;
     private Context mContext;
+    private ImageButton ib_back_sec;
 
     public SecondFragment()
     {
@@ -109,13 +111,20 @@ public class SecondFragment extends Fragment
     }
 
     public void initListener() {
+        ib_back_sec.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Perform action on click
+
+                MainActivity.start_fragment(0);
+            }
+        });
 
     }
 
     public void initView() {
 
         tv_debug= (TextView)getView().findViewById(R.id.tv_sec_debug);
-
+        ib_back_sec = (ImageButton)getView().findViewById(R.id.ib_back_sec);
 
     }
 
