@@ -63,7 +63,7 @@ public class FirstFragment extends Fragment  implements RippleView.RippleAnimati
     private int no_reply_index;
     private String name_event;
 
-    public static final Boolean ISDEBUG =true;
+    public static final Boolean ISDEBUG =false;
 
     //rippleview
     private RippleView mRippleView;
@@ -112,7 +112,7 @@ public class FirstFragment extends Fragment  implements RippleView.RippleAnimati
 
         SharedPreferences prefs = mContext.getSharedPreferences("pref", MODE_PRIVATE);
         is_tv_on = prefs.getInt("state_launcher", 3);
-        str_simple = prefs.getString("str_simple", "자동 응답앱 개발 테스트중..");
+        str_simple = prefs.getString("str_simple", "위 버튼을 눌러 문자내용을 설정하세요.");
         no_reply_index = prefs.getInt("no_reply_index", -1);
         mNo_event = prefs.getInt("event_index", 0);
         //name_event = prefs.getString("name_event_"+mNo_event, "이벤트명이 없습니다.");

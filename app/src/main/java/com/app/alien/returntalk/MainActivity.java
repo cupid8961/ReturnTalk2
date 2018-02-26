@@ -93,19 +93,8 @@ public class MainActivity extends AppCompatActivity {
         btn_first.setOnClickListener(movePageListener);
         btn_first.setTag(0);
 
-        if (FirstFragment.ISDEBUG) {
-            btn_second.setOnClickListener(movePageListener);
-            btn_second.setTag(1);
-        } else {
-            btn_second.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    // Perform action on click
-
-                    Toast.makeText(mContext, "리턴함 기능은 구현중입니다..!", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-        }
+        btn_second.setOnClickListener(movePageListener);
+        btn_second.setTag(1);
 
 
     }
