@@ -266,7 +266,7 @@ public class FirstFragment extends Fragment  implements RippleView.RippleAnimati
                     //프레퍼런스불러오기
                     SharedPreferences prefs = getActivity().getSharedPreferences("pref", MODE_PRIVATE);
                     int event_index = prefs.getInt("event_index", 0);
-
+                    mNo_event = event_index;
 
                     //현재시간 가져오기
                     Date time_now = new Date();
@@ -326,6 +326,7 @@ public class FirstFragment extends Fragment  implements RippleView.RippleAnimati
                     int event_index = prefs.getInt("event_index", 0);
                     int cnt_reply =  prefs.getInt("no_reply_index", 0);
 
+                    mNo_event = event_index;
 
                     //현재시간 가져오기
                     Date time_now = new Date();
@@ -336,6 +337,10 @@ public class FirstFragment extends Fragment  implements RippleView.RippleAnimati
                     editor.putInt("state_launcher", 1);
                     editor.putLong("time_end_"+mNo_event, time_now.getTime());
                     editor.putString("name_event_"+mNo_event, name_event);//cnt_reply
+
+
+                    Log.i("returntalk","firstFragment /tv_off/name_event_"+mNo_event +" / "+ name_event);
+
                     editor.putInt("event_index", event_index);
                     editor.putInt("no_reply_index", 0);
                     editor.putInt("cnt_reply_"+mNo_event, cnt_reply);//cnt_reply
