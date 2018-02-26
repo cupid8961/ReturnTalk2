@@ -1,15 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#ffffee"
     >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/imageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                app:srcCompat="@drawable/backbtn" />
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="0.3dp"
+                android:background="#5285c4" />
+
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -56,13 +76,17 @@
                 android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Return Talk" />
+                android:text="Return Talk"
+                android:textSize="30sp"
+                android:textColor="#5285c4" />
 
             <TextView
                 android:id="@+id/textView2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="당신의 소식을 모임별로 활용해보세요" />
+                android:text="당신의 소식을 모임별로 활용해 보세요"
+                android:textSize="25sp"
+                android:textColor="#5285c4"/>
 
             <TextView
                 android:id="@+id/tv_sec_debug"
@@ -70,36 +94,34 @@
                 android:layout_height="wrap_content"
                 android:text="tv_sec_debug"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:visibility="visible" />
+                android:visibility="gone" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#ff2233"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:orientation="vertical">
 
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fillViewport="true"
-                android:background="#118866">
+                android:fillViewport="true">
 
 
                 <com.app.alien.returntalk.ExpandableHeightGridView
                     android:id="@+id/gv_01"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="0dp"
                     android:layout_marginBottom="0dp"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
+                    android:layout_marginTop="0dp"
                     android:horizontalSpacing="10dp"
                     android:isScrollContainer="false"
-                     android:stretchMode="columnWidth"
-                    android:verticalSpacing="0dp"
                     android:numColumns="3"
-                    />
+                    android:stretchMode="columnWidth"
+                    android:verticalSpacing="0dp" />
             </ScrollView>
         </LinearLayout>
 

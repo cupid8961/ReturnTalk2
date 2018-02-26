@@ -82,6 +82,10 @@ public class ThirdFragment extends Fragment {
 
                     editor.putString("str_simple", et_msg_simple_f3.getText().toString());
                     editor.putString("name_event_"+event_no, et_event_name_f3.getText().toString());
+                    editor.putString("name_event_last", et_event_name_f3.getText().toString());
+
+                    Log.i("returntalk", "ThirdFragment / name_event_"+event_no + " / "+ et_event_name_f3.getText().toString());
+
                     editor.putInt("state_launcher", 2);
                     editor.commit();
                     MainActivity.start_fragment(0);

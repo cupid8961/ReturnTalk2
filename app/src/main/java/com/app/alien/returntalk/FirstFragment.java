@@ -115,7 +115,10 @@ public class FirstFragment extends Fragment  implements RippleView.RippleAnimati
         str_simple = prefs.getString("str_simple", "자동 응답앱 개발 테스트중..");
         no_reply_index = prefs.getInt("no_reply_index", -1);
         mNo_event = prefs.getInt("event_index", 0);
-        name_event = prefs.getString("name_event_"+mNo_event, "이벤트명이 없습니다.");
+        //name_event = prefs.getString("name_event_"+mNo_event, "이벤트명이 없습니다.");
+        name_event = prefs.getString("name_event_last", "이벤트명이 없습니다.");
+
+        Log.i("returntalk", "FirstFragment / name_event_"+mNo_event + " / "+name_event);
 
         Log.i("returntalk","FirstFragment / is_tv_on : "+is_tv_on);
 
@@ -461,7 +464,7 @@ public class FirstFragment extends Fragment  implements RippleView.RippleAnimati
         String phonenum = prefs.getString("phone_num_"+no_event+"_"+no_reply, "");
         String msg_client = prefs.getString("msg_client_"+no_event+"_"+no_reply, "");
 
-        String now_time = CalendarUtils.ConvertMilliSecondsToFormattedDate(time_receive+"");
+        String now_time = CalendarUtils.ConvertMilliSecondsToFormattedDate(time_receive+"","a hh:mm:ss");
 
         // 첫 번째 아이템 추가.
         lva_sms.addItem(""+ (no_reply+1),now_time,phonenum,msg_client);
